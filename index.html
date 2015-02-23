@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Asynchronous Programming Techniques</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+		<link rel="stylesheet" href="css/preso.css" >
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Async Programming</h1>
+					<h3>Rope ladders and quicksand shoes</h3>
+					<p>
+						<small>Created by <a href="http://bluefletch.com">Blake Byrnes</a> / <a href="http://twitter.com/blakebyrnes">@blakebyrnes</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Who am I?</h2>
+					<h4>
+						CTO of BlueFletch Mobile
+					</h4>
+					<p>
+						I work with: <em>iOS, Android, nodejs, html5/ionic/cordova, AWS and sometimes .NET, Backend Java</em>
+					</p>
+				</section>
+
+				<!-- -->
+				<section>
+					 <section>
+						<h2>Why are we here?</h2>
+					</section>
+					<section>
+						<h2>Async!</h2>
+						<p>It's more important than you think.</p>
+					</section>
+					<section>
+						<h2>Industry Movement</h2>
+						<p>Rise of Mobile</p>
+						<!-- swap for ios/android devices -->
+						<p>Rise of Single Page Apps</p>
+						<!-- swap for angular/backbone logos -->
+						<p>nodejs</p>
+					</section>
+					<section>
+						<h2>Async...</h2>
+						<p class="fragment">Single callbacks === easy</p>
+						<!-- example showing simple callbacks -->
+						<p class="fragment">Async-style programming => <strong>hard</strong></p>
+						<p class="fragment grow">Thinking asynchronously is hard.  
+But cheer up.  
+Eventually you'll get it!</p>
+						<pre class="fragment"><code>//hard</code></pre>
+						<!-- example showing nested callbacks -->
+						<aside class="notes">
+						- give prize to first person who laughs
+						- possibly put a stewie slide with a "wait for it" face
+						</aside>
+					</section>
+					<section>
+						<h2>You must learn it!</h2>
+						<p>Story Time</p>
+					</section>
+					<section>
+						<h2>Real Email</h2>
+						<p>"I am working on a appcelerator project for android and I see that the AJAX call  is not synchronous..   And because of this, my function (sic) populating the UI from the AJAX response is failing."</p>
+					</section>
+					<section>
+						<p>Pseudo-code</p>
+						<pre class=" smallest"><code class="javascript">
+plugs.prototype.httpReq = function() {
+  ...
+
+  xhr.onload = function(e) {
+    dataObj = JSON.parse(xhr.responseText)
+  };
+
+  xhr.open("GET", url,false);
+  // Send the request.
+  xhr.send();
+};
+
+plugs.prototype.populateData = function(){
+  for(var i=0;i dataObj.length;i++) { //CRASH (dataObj is undefined)  
+...
+
+plugs.httpReq();
+plugs.populateData();
+						</code></pre>
+						<aside class="notes">
+							Developer didn't understand that the asynchronous code would perform out of order from the sequential order on the screen
+						</aside>
+
+					</section>
+					<section>
+						<h2>Don't let this happen to your</h2>
+					</section>
+					<section >
+						<h2>Add to your toolbelt</h2>
+						<img src="images/toolbelt.jpg"/>
+					</section>
+				</section>
+				<section>
+					<h2>What is async?</h2>
+					<section>
+						<h4>Code that doesn't wait!</h4>
+						<p>Will execute later</p>
+						<!-- running man picture -->
+						<aside class="notes">
+							Ever thought as you were leaving, "Remember to lock the door", then you did a bunch of other stuff, and then you finally got to the door, and remembered to lock it.  Kinda like that.
+
+							Important to talk about how it doesn't block.  Implication is that it can get more out of the CPU where the code is running
+						</aside>
+					</section>
+					<section>
+						<p>User Interface</p>
+						<!-- show someone about to hit a ui button -->
+						<pre style="font-size:35px"><code data-trim>
+$("#button").click(function(e){
+  console.log("handle async");
+});
+						</code></pre>
+						<aside class="notes">
+							Client side - handle events
+						</aside>
+					</section>
+					<section>
+						<h4>I/O</h4>
+						<p class="fragment">Network (ajax) requests</p>
+						<p class="fragment">Database request</p>
+						<p class="fragment">File reads/writes</p>
+					</section>
+					<section>
+						<pre class="smaller"><code data-trim>
+console.log(1);
+
+$("#button").click();
+
+console.log(2);
+
+console.log(3);
+
+//1
+//click
+//2
+//3
+						</code></pre>
+					</section>
+					<section>
+						<pre><code data-trim>
+console.log(1);
+
+$("#button").click(function(e){
+  console.log(2);
+});
+
+console.log(3);
+
+//1
+//3
+//click: 2
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h2>The run loop</h2>
+					<section>
+						<p>Running man (running)</p>
+						<p>
+							TODO: create slide showing the 3 bosses.  as he encounters each, start our video stream and broadcast</p>
+						<aside class="notes">
+							Back to the running man.  He's going to keep running, until he runs into obstacles.  
+							Viewers are prompted once something is about to happen.  "Wait for execute"
+						</aside>
+					</section>
+					<section>
+						<p>[Run loop picture]</p>
+					</section>
+					<section>
+						<h5>Javascript (aka, the event loop)</h5>
+						<pre><code>
+  while(queue.waitForMessage()){
+    queue.processNextMessage();
+  }
+
+</code></pre>
+						<aside class="notes">
+							In web browsers, messages are added any time an event occurs and there is an event listener attached to it.
+						</aside>
+					</section>
+					<section>
+						<h5>Timers Demystified</h5>
+						<pre><code>
+  setTimeout(delayedFunction, 100);
+
+</code></pre>
+<br/>
+						<p class="fragment">Just pops onto the event loop after 100 ms*</p>
+						<p class="fragment"><i>*kind of</i></p>
+						<aside class="notes">
+							Calling setTimeout will add a message to the queue after the time passed as second argument. 
+						</aside>
+					</section>
+				</section>
+				<section>
+					<h2>Threads</h2>
+					<section>
+						<h5>Is Asynchronous different than Multi-Threading?</h5>
+						<p>Async not <i>necessarily</i> multi-threaded</p>
+						
+						<p>
+							Multi-threading === run heavy process in background
+						</p>
+						<aside class="notes">
+							Language dependent
+
+							If op doesn't require CPU, that operation can be done without spawning another thread (i/o, hardware notification)
+
+							<a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-	difference">stack overflow</a>
+						</aside>
+					</section>
+					<section>
+						<p>[Image of threads]</p>
+					</section>
+					<!-- image of  -->
+				</section>
+				<section>
+					<h1>Ok, got it</h1>
+					<h3>Is there anything more?</h3>
+				</section>
+				<section>
+					<h1>You have no idea</h1>
+				</section>
+				<section>
+					<h2>Why is it hard?</h2>
+					
+					<section>
+						<p>Different way of thinking</p>
+					</section>
+					<section>
+						<p>Back to the Future</p>
+						<img alt="delorean"/>
+
+						<aside class="notes">
+							Have to start thinking about what will eventually happen.  If this, then this, then this..
+
+							Log a function to occur eventually, written now
+						</aside>
+
+					</section>
+					<section>
+						<p>Functional Programming/Thinking</p>
+						<img alt="functional programming image"/>
+						<aside class="notes">
+							Break it down into units
+						</aside>
+					</section>
+
+					<section>
+						<p>Your stuff might be gone</p>
+						<img alt="broken into car"/>
+						<aside class="notes">
+							By the time your "asynchronous" code is done, your view might not be there anymore
+
+							Android example (activity requests a network resource, puts in a callback handler, gone when it returns)
+						</aside>
+					</section>
+					<aside class="notes">
+						I've done these callbacks, why is this a big deal?
+					</aside>
+
+				</section>
+
+				<section>
+					<h2>What can go wrong?</h2>
+				</section>
+
+				<section>
+					<h1>Diagonal Coding</h1>
+				</section>
+				<section>
+					<h3>Add 5 new features</h3>
+					<pre class="smallest stretch" ><code>
+fs.readdir(source, function(err, files) {
+  if (err) {
+    console.log('Error finding files: ' + err);
+  } else {
+    files.forEach(function(filename, fileIndex) {
+      console.log(filename);
+      gm(source + filename).size(function(err, values) {
+        if (err) {
+          console.log('Error identifying file size: ' + err)
+        } else {
+          console.log(filename + ' : ' + values);
+          aspect = (values.width / values.height);
+          widths.forEach(function(width, widthIndex) {
+            height = Math.round(width / aspect);
+            console.log('resizing ' + filename + 'to ' + height + 'x' + height);
+            var fn = destination + 'w' + width + '_' + filename;
+            this.resize(width, height).write(fn, function(err) {
+              if (err) console.log('Error writing file: ' + err);
+            });
+          }.bind(this));
+        }
+      });
+    });
+  }
+});
+</pre></code>
+				</section>
+				<section>
+					<h3>Example - can't change backend</h3>
+					<ol>
+						<li class="fragment">Load blog</li>
+						<li class="fragment">Load author</li>
+						<li class="fragment">Load comments</li>
+						<li class="fragment">Load each commentor user profile</li>
+					</ol>
+				</section>
+				<section>
+					<pre class="smallest stretch" ><code style="font-size:25px !important; line-height:30px">
+var blog = {};
+$.get('/blogs/1', function(data){
+  blog = data;
+  
+  $.get('/users/' + data.authorId, function(author){
+    blog.author = author;
+  });
+
+  $.get('/blogs/1/comments', function(comments){
+    blog.comments = comments;
+    comments.forEach(function(comment){
+      $.get('/users/' + data.authorId, function(author){
+        comment.author = author;
+      });
+    });
+  });
+});
+					</pre></code>
+				</section>
+
+				<section>
+					<h2>How it starts</h2>
+					<pre class="smallest stretch" ><code class="javascript">
+var blog = {};
+$.get('/blogs/1', function(data){
+  blog = data;
+
+  //NEW! Featured Articles
+  if (blog.isFeatured){
+    $.get('/ads', function(data){
+      //load ad and display in main content div
+    }).fail(function(){
+      //TODO: download comments/authors like a normal article... copy here??
+    });
+  } else {
+    
+    $.get('/users/' + data.authorId, function(author){
+      blog.author = author;
+    });
+
+    $.get('/blogs/1/comments', function(comments){
+      blog.comments = comments;
+      comments.forEach(function(comment){
+        $.get('/users/' + data.authorId, function(author){
+          comment.author = author;
+        });
+      });
+    });
+  }
+});
+					</pre></code>
+				</section>
+				<section>
+					<section>
+						<h2>Small branches continue to nest logic</h2>
+					</section>
+					<section>
+						<h2>Eventually, you lose</h2>
+					</section>
+					<section>
+						<pre class="smallest stretch" ><code class="javascript" data-trim>
+_makePostAppend: function( params, body, options, next ){
+
+    var self = this;
+    var body;
+
+    if( typeof( next ) !== 'function' ) next = function(){};
+
+    // Check that the method is implemented
+    if( ! self.handlePostAppend ){
+      self._sendError( next, new self.NotImplementedError( ) );
+      return;
+    }
+
+    // Check the IDs
+    self._checkParamIds( params, body, false, function( err ){  
+      self._sendErrorOnErr( err, next, function(){
+
+        self.schema.validate(  body, function( err, body, errors ) {
+          self._sendErrorOnErr( err, next, function(){
+
+            if( errors.length ){
+              self._sendError( next, new self.UnprocessableEntityError( { errors: errors } ) );
+            } else {
+             // Fetch the doc
+              self.execAllDbFetch( params, body, options, function( err, fullDoc ){
+                self._sendErrorOnErr( err, next, function(){
+                 self.extrapolateDoc( params, body, options, fullDoc, function( err, doc) {
+                    self._sendErrorOnErr( err, next, function(){
+						</pre></code>
+					</section>
+					<section>
+						<h5>continued</h5>
+						<pre class="smallest stretch" ><code class="javascript">
+               
+                      self._castDoc( doc, function( err, doc) {
+                        self._sendErrorOnErr( err, next, function(){
+
+                          // Actually check permissions
+                          self.checkPermissionsPostAppend( params, body, options, doc, fullDoc, function( err, granted ){
+                            self._sendErrorOnErr( err, next, function(){
+
+                              if( ! granted ){
+                                self._sendError( next, new self.ForbiddenError() );
+                              } else {
+
+                                // Clean up body from things that are not to be submitted
+                                //if( self.schema ) self.schema.cleanup( body, 'doNotSave' );
+                                self.schema.cleanup( body, 'doNotSave' );
+
+                                // Paranoid check
+                                // Make sure that the id property in the body does match
+                                // the one passed as last parameter in the list of IDs
+                                body[ self.idProperty ] = params[ self.idProperty ];
+
+                                self.execPostDbAppend( params, body, options, doc, fullDoc, function( err, fullDocAfter ){
+
+						</pre></code>
+					</section>
+					<section>
+						<h5>continued</h5>
+						<pre class="smallest stretch" ><code class="javascript">
+                                  self._sendErrorOnErr( err, next, function(){
+                                    self.extrapolateDoc( params, body, options, fullDocAfter, function( err, doc) {
+                                      self._sendErrorOnErr( err, next, function(){
+
+                                        self._castDoc( fullDocAfter, function( err, docAfter) {
+                                          self._sendErrorOnErr( err, next, function(){
+
+                                            // Remote request: set headers, and send the doc back (if echo is on)
+                                            if( self.remote ){
+                                              if( self.echoAfterPostAppend ){
+
+                                                 self.prepareBeforeSend( docAfter, function( err, docAfter ){
+                                                   self._sendErrorOnErr( err, next, function(){
+
+                                                      self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
+                                                        self._sendErrorOnErr( err, next, function(){
+
+                                                          self._res.json( 200, docAfter );
+
+                                                        });
+                                                      });
+                                                   })
+                                                 })
+                                              } else { 
+                                                self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
+						</pre></code>
+					</section>
+					<section>
+						<h5>continued</h5>
+						<pre class="smallest stretch" ><code class="javascript">
+                                                  self._sendErrorOnErr( err, next, function(){
+
+                                                    self._res.send( 204, '' );
+
+                                                  });
+                                                });
+
+                                              }
+                                            // Local request: simply return the doc to the asking function
+                                            } else {
+
+                                              self.prepareBeforeSend( docAfter, function( err, docAfter ){
+                                                self._sendErrorOnErr( err, next, function(){
+
+                                                  self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
+                                                    self._sendErrorOnErr( err, next, function(){
+
+                                                      next( null, docAfter, self.idProperty );
+
+                                                    })
+                                                  })
+
+                                                })
+                                              })
+                                            }
+						</pre></code>
+					</section>
+					<section>
+						<h5>finally</h5>
+						<pre class="smallest stretch" ><code class="javascript">
+                                          })
+                                        });
+                                      });
+                                    })
+                                  }) // err
+                                }) // execPostDbAppend
+
+                              } // granted
+
+                            })
+                          }) 
+
+                        }) 
+                      }) 
+                    })
+                  }) 
+                }) // err
+              }) // checkPermissionsPostAppend
+            } // errors.length
+
+          }) // err
+        }) // self.validate
+      }) // err
+    }) // self.validate
+  },
+
+						</pre></code>
+					</section>
+					<section>
+						<pre class="smallest stretch" ><code class="javascript" style="font-size:6px;line-height:4px;">
+_makePostAppend: function( params, body, options, next ){
+
+    var self = this;
+    var body;
+
+    if( typeof( next ) !== 'function' ) next = function(){};
+
+    // Check that the method is implemented
+    if( ! self.handlePostAppend ){
+      self._sendError( next, new self.NotImplementedError( ) );
+      return;
+    }
+
+    // Check the IDs
+    self._checkParamIds( params, body, false, function( err ){  
+      self._sendErrorOnErr( err, next, function(){
+
+        self.schema.validate(  body, function( err, body, errors ) {
+          self._sendErrorOnErr( err, next, function(){
+
+            if( errors.length ){
+              self._sendError( next, new self.UnprocessableEntityError( { errors: errors } ) );
+            } else {
+
+              // Fetch the doc
+              self.execAllDbFetch( params, body, options, function( err, fullDoc ){
+                self._sendErrorOnErr( err, next, function(){
+
+
+                  self.extrapolateDoc( params, body, options, fullDoc, function( err, doc) {
+                    self._sendErrorOnErr( err, next, function(){
+
+                      self._castDoc( doc, function( err, doc) {
+                        self._sendErrorOnErr( err, next, function(){
+
+                          // Actually check permissions
+                          self.checkPermissionsPostAppend( params, body, options, doc, fullDoc, function( err, granted ){
+                            self._sendErrorOnErr( err, next, function(){
+
+                              if( ! granted ){
+                                self._sendError( next, new self.ForbiddenError() );
+                              } else {
+
+                                // Clean up body from things that are not to be submitted
+                                //if( self.schema ) self.schema.cleanup( body, 'doNotSave' );
+                                self.schema.cleanup( body, 'doNotSave' );
+
+                                // Paranoid check
+                                // Make sure that the id property in the body does match
+                                // the one passed as last parameter in the list of IDs
+                                body[ self.idProperty ] = params[ self.idProperty ];
+
+                                self.execPostDbAppend( params, body, options, doc, fullDoc, function( err, fullDocAfter ){
+                                  self._sendErrorOnErr( err, next, function(){
+
+                                    self.extrapolateDoc( params, body, options, fullDocAfter, function( err, doc) {
+                                      self._sendErrorOnErr( err, next, function(){
+
+                                        self._castDoc( fullDocAfter, function( err, docAfter) {
+                                          self._sendErrorOnErr( err, next, function(){
+
+                                            // Remote request: set headers, and send the doc back (if echo is on)
+                                            if( self.remote ){
+                                              if( self.echoAfterPostAppend ){
+
+                                                 self.prepareBeforeSend( docAfter, function( err, docAfter ){
+                                                   self._sendErrorOnErr( err, next, function(){
+
+                                                      self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
+                                                        self._sendErrorOnErr( err, next, function(){
+
+                                                          self._res.json( 200, docAfter );
+
+                                                        });
+                                                      });
+                                                   })
+                                                 })
+                                              } else { 
+
+                                                self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
+                                                  self._sendErrorOnErr( err, next, function(){
+
+                                                    self._res.send( 204, '' );
+
+                                                  });
+                                                });
+
+                                              }
+
+                                            // Local request: simply return the doc to the asking function
+                                            } else {
+
+                                              self.prepareBeforeSend( docAfter, function( err, docAfter ){
+                                                self._sendErrorOnErr( err, next, function(){
+
+                                                  self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
+                                                    self._sendErrorOnErr( err, next, function(){
+
+                                                      next( null, docAfter, self.idProperty );
+
+                                                    })
+                                                  })
+
+                                                })
+                                              })
+                                            }
+
+                                          })
+                                        });
+
+                                      });
+                                    })
+
+
+                                  }) // err
+                                }) // execPostDbAppend
+
+                              } // granted
+
+
+                            })
+                          }) 
+
+                        }) 
+                      }) 
+
+                    })
+                  }) 
+
+                }) // err
+              }) // checkPermissionsPostAppend
+
+            } // errors.length
+
+          }) // err
+        }) // self.validate
+
+      }) // err
+    }) // self.validate
+  },
+
+						</pre></code>
+					</section>
+					<section>
+						<h1>Convinced?</h1>
+					</section>
+				</section>
+
+				<section>
+					<h2>Where will I find async?</h2>
+					<section>
+						<h3>Producers</h3>
+						<p class="fragment">User Interface</p>
+						<p class="fragment">Models</p>
+						<p class="fragment">Ajax</p>
+						<p class="fragment">System Changes</p>
+						<aside class="notes">
+							UI - broadcast events
+							Models - staet changes
+							Ajax - complete/error
+							System - wifi, location, battery changes
+						</aside>
+					</section>
+					<section>
+						<h3>Consumers</h3>
+						<p class="fragment">Views</p>
+						<p class="fragment">Controllers</p>
+						<p class="fragment">Models</p>
+						<aside class="notes">
+							Views - update when state changes
+							Controllers - direct action on events
+							Models - change when other models change
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<h2>Problems to Solve</h2>
+				</section>
+				<section>
+					<h2>Long Tasks One After Another</h2>
+					<aside class="notes">
+						think ajax, file uploads
+					</aside>
+				</section>
+
+				<section>
+					<h2>Long Tasks at once</h2>
+					<aside class="notes">
+						think ajax, file uploads
+					</aside>
+				</section>
+
+				<section>
+					<h2>Wait for tasks to finish</h2>
+					<aside class="notes">
+						after all ajax downloaded, display view
+					</aside>
+				</section>
+
+				<section>
+					<h2>Run Task without Blocking UI</h2>
+					<aside class="notes">
+						facebook detects dom changes in background (ie, react)
+					</aside>
+				</section>
+				<section>
+					<h2>Handling Errors</h2>
+					<aside class="notes">
+						handle errors that crop up in your application
+						unhandled exceptions, 
+					</aside>
+				</section>
+				<section>
+					<h2>Dynamic or Complicated Workflows</h2>
+					<aside class="notes">
+						Complicated sequence of activities that have lots of branching and flows might need an event system
+					</aside>
+				</section>
+				<section>
+					<h2>Handling Triggered Events</h2>
+					<aside class="notes">
+						System events, UI events, etc.  Handle changes and react to them
+					</aside>
+				</section>
+				
+				<section>
+					<h2>Patterns</h2>
+					<p class="fragment">aka, Great, what do I do with this knowledge?</p>
+				</section>
+
+				<section>
+					<h2>Callbacks</h2>
+					<section>
+						<p>Call me later</p>
+					</section>
+					<section>
+						<pre class="smaller"><code>
+  readABigFile('filename.jpg', 
+    function afterRead(error, file){
+      console.log("Here's my file " + file);
+    });
+						</code></pre>
+					</section>
+					<section>
+						<pre class="smaller"><code style="font-size:24px">
+  readABigFile(new OnFileReadListener(){
+     @Override
+     public void onFileRead(File file){
+        Log.d(TAG, "Read file " + file);
+     }
+     @Override
+     public void onError(Exception e){
+        Log.e(TAG, "Error reading file " + e);
+     }
+  });
+						</code></pre>
+					</section>
+					<section>
+						<h5>Positives</h5>
+						<p>Built-in</p>
+						<aside class="notes">
+							No 3rd party necessary
+						</aside>
+					</section>
+					<section>
+						<h5>Positives</h5>
+						<p>Easy to Read</p>
+					</section>
+					<section>
+						<h5>Negatives</h5>
+						<p>Multiple calls quickly devolve</p>
+						<aside class="notes">
+							Nested calls
+						</aside>
+					</section>
+					<section>
+						<h5>Negatives</h5>
+						<p>Program stalls if not called</p>
+						<p><i>happens more than you'd expect</i></p>
+						<aside class="notes">
+							If you return and forget to call the callback, the code won't ever continue.  This is a fundamental difference from sequential programs.
+						</aside>
+					</section>
+					<section>
+						<h5>When to use</h5>
+						<p>Simple use cases (most)</p>
+						<aside class="notes">
+							A lot of code doesn't need some higher level abstraction.  Don't go down a path of libraries and patterns if you don't need them.
+						</aside>
+				</section>
+				<section>
+					<h2>Callback Libraries</h2>
+					<section>
+						<p>Add coordination across callbacks</p>
+					</section>
+					<section>
+						<h5>Positives</h5>
+						<p>Consistent structure for calls</p>
+					</section>
+					<section>
+						<h5>Negatives</h5>
+						<p>Third Party Library</p>
+					</section>
+					<section>
+						<h5>Negatives</h5>
+						<p>Enforced Opinion</p>
+					</section>
+					<section>
+						<h5>Negatives</h5>
+						<p>Still inherit some problems of callbacks</p>
+					</section>
+					<section>
+						<h5>javascript</h5>
+						<p>async.js</p>
+						TODO: quick example
+					</section>
+					<section>
+						<h5>Android</h5>
+						<p>Bolts</p>
+						TODO: quick example
+					</section>
+				</section>
+
+				<section>
+					<h2>Delegation Pattern</h2>
+					<section>
+						Hand off control to 1 other actor
+					</section>
+					<section>
+				</section>
+				<section>
+					<h2>Observer Pattern</h2>
+				</section>
+				<section>
+					<h2>Promises</h2>
+				</section>
+				<section>
+					<h2>Message Bus</h2>
+				</section>
+				<section>
+					<h2>Coroutines</h2>
+				</section>
+				<section>
+					<h2>Miscellaneous</h2>
+				</section>
+
+				<section>
+					<h2>Tips/Tricks</h2>
+					<section>
+						2 deep!
+					</section>
+					<section>
+						Aim for vertical
+					</section>
+					<section>
+						Avoid Diagonal
+					</section>
+					<section>
+						Focus on readability
+					</section>
+					<section>
+						Write testable functions, then add coordination
+					</section>
+					<section>
+						Refactor as you write and notice nesting
+					</section>
+					<section>
+						Don't be clever.  Use patterns when you need them!!!
+					</section>
+					<section>
+						Choose your own adventure... once
+						<aside class="notes">
+						Avoid too many patterns at once (choose your own adventure)
+						</aside>
+					</section>
+					<section>
+						Choose the pattern that fits your problem-set:
+						 - System Wide: message bus
+						 - Downloads/Waterfall Events: Promises/Callback Coordinators
+						 - Random Events: message bus/state machine
+					     - React to Individual Model/View: observer
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+				slideNumber: true,
+				keyboard: {
+	              g: 'slide', // go to the next slide when the ENTER key is pressed
+	            },
+
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
