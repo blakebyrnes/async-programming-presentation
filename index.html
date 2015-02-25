@@ -29,8 +29,13 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+        <style>
 
-		<!--[if lt IE 9]>
+            .backgrounds .bg-blur {
+                -webkit-filter: blur(6px) opacity(20%);
+            }
+        </style>
+        <!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
 	</head>
@@ -61,8 +66,8 @@
 
 				<!-- -->
 				<section>
-					 <section>
-						<h2>Why are we here?</h2>
+					 <section  class="bg-blur" data-background-image="http://www.surface-tec.com/nanomech/images/nm5.jpg">
+                         <h2>Why are we here?</h2>
 					</section>
 					<section>
 						<h2>Async!</h2>
@@ -76,6 +81,9 @@
 						<!-- swap for angular/backbone logos -->
 						<p>nodejs</p>
 					</section>
+                    <section class="bg-blur" data-background-image="https://www.rickscloud.com/wp-content/uploads/2014/05/rise_of_mobile-1280x880.jpg">
+                        <h1>Rise of Mobile</h1>
+                    </section>
 					<section>
 						<h2>Async...</h2>
 						<p class="fragment">Single callbacks === easy</p>
@@ -341,7 +349,7 @@ fs.readdir(source, function(err, files) {
     });
   }
 });
-</pre></code>
+                    </code></pre>
 				</section>
 				<section>
 					<h3>Example - can't change backend</h3>
@@ -371,7 +379,7 @@ $.get('/blogs/1', function(data){
     });
   });
 });
-					</pre></code>
+                    </code></pre>
 				</section>
 
 				<section>
@@ -404,7 +412,7 @@ $.get('/blogs/1', function(data){
     });
   }
 });
-					</pre></code>
+                    </code></pre>
 				</section>
 				<section>
 					<section>
@@ -443,7 +451,7 @@ _makePostAppend: function( params, body, options, next ){
                 self._sendErrorOnErr( err, next, function(){
                  self.extrapolateDoc( params, body, options, fullDoc, function( err, doc) {
                     self._sendErrorOnErr( err, next, function(){
-						</pre></code>
+                        </code></pre>
 					</section>
 					<section>
 						<h5>continued</h5>
@@ -471,7 +479,7 @@ _makePostAppend: function( params, body, options, next ){
 
                                 self.execPostDbAppend( params, body, options, doc, fullDoc, function( err, fullDocAfter ){
 
-						</pre></code>
+                        </code></pre>
 					</section>
 					<section>
 						<h5>continued</h5>
@@ -501,7 +509,7 @@ _makePostAppend: function( params, body, options, next ){
                                                  })
                                               } else { 
                                                 self.afterPostAppend( params, body, options, doc, fullDoc, docAfter, fullDocAfter, function( err ){
-						</pre></code>
+                        </code></pre>
 					</section>
 					<section>
 						<h5>continued</h5>
@@ -531,7 +539,7 @@ _makePostAppend: function( params, body, options, next ){
                                                 })
                                               })
                                             }
-						</pre></code>
+                        </code></pre>
 					</section>
 					<section>
 						<h5>finally</h5>
@@ -562,7 +570,7 @@ _makePostAppend: function( params, body, options, next ){
     }) // self.validate
   },
 
-						</pre></code>
+                        </code></pre>
 					</section>
 					<section>
 						<pre class="smallest stretch" ><code class="javascript" style="font-size:6px;line-height:4px;">
@@ -707,7 +715,7 @@ _makePostAppend: function( params, body, options, next ){
     }) // self.validate
   },
 
-						</pre></code>
+                        </code></pre>
 					</section>
 					<section>
 						<h1>Convinced?</h1>
@@ -824,6 +832,21 @@ _makePostAppend: function( params, body, options, next ){
   });
 						</code></pre>
 					</section>
+                    <section>
+						<pre class="smaller"><code style="font-size:24px">
+  readABigFile(file -> {
+    Log.d(TAG, "Read file " + file);
+  },
+  ex -> {
+    Log.e(TAG, "Error reading file " + e);
+  });
+                        </code></pre>
+                        <aside class="notes">
+                            CHEERS!
+
+                            TODO: slide with applause?
+                        </aside>
+                    </section>
 					<section>
 						<h5>Positives</h5>
 						<p>Built-in</p>
@@ -856,6 +879,7 @@ _makePostAppend: function( params, body, options, next ){
 						<aside class="notes">
 							A lot of code doesn't need some higher level abstraction.  Don't go down a path of libraries and patterns if you don't need them.
 						</aside>
+					</section>
 				</section>
 				<section>
 					<h2>Callback Libraries</h2>
@@ -886,7 +910,32 @@ _makePostAppend: function( params, body, options, next ){
 					<section>
 						<h5>Android</h5>
 						<p>Bolts</p>
-						TODO: quick example
+						<pre class="smallest stretch" ><code>
+ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
+query.whereEqualTo("post", 123);
+
+findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>>() {
+  public Task<Void> then(Task<List<ParseObject>> results) throws Exception {
+    // Collect one task for each delete into an array.
+    ArrayList<Task<Void>> tasks = new ArrayList<Task<Void>>();
+    for (ParseObject result : results) {
+      // Start this delete immediately and add its task to the list.
+      tasks.add(deleteAsync(result));
+    }
+    // Return a new task that will be marked as completed when all of the deletes are
+    // finished.
+    return Task.whenAll(tasks);
+  }
+}).onSuccess(new Continuation<Void, Void>() {
+  public Void then(Task<Void> ignored) throws Exception {
+    // Every comment was deleted.
+    return null;
+  }
+});
+						</code></pre>
+                        <aside class="notes">
+                            https://github.com/BoltsFramework/Bolts-Android
+                        </aside>
 					</section>
 				</section>
 
@@ -894,24 +943,313 @@ _makePostAppend: function( params, body, options, next ){
 					<h2>Delegation Pattern</h2>
 					<section>
 						Hand off control to 1 other actor
+						<aside class="notes">
+						Android: think, registering activity callback when an action happens in a fragment (clicked on button)
+						</aside>
 					</section>
 					<section>
+						TODO: Android example (listener)
+					</section>
+					<section>
+						<h5>Positives</h5>
+						<p>Two-way Control</p>
+					</section>
+					<section>
+						<h5>Positives</h5>
+						<p>Very Clear API (interface)</p>
+					</section>
+					<section>
+						<h5>Negatives</h5>
+						<p>Switching Listener</p>
+					</section>
+					<section>
+						<h5>When to use</h5>
+						<p>Clear pattern that needs to be handled by listener</p>
+						<p>One listener/actor</p>
+					</section>
+					<section>
+						<h5>When to use</h5>
+						<p>UI Component 1-to-1 "Worker"</p>
+						<p>"Instance" of service layer</p>
+						<p>Service layer coupled to single view</p>
+					</section>
 				</section>
 				<section>
 					<h2>Observer Pattern</h2>
+                    <section>
+                        "Observe" an object's events
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Loose Coupling</p>
+                        <aside class="notes">
+                            Publisher doesn't know who is listening
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Specific Object of Interest</p>
+                        <aside class="notes">
+                            Not just willy-nilly listening to events.  Most of the time this is great, but sometimes you need to know a "new object" got created.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>One or Many Subscribers</p>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Memory Loops</p>
+                        <aside class="notes">
+                            View might disappear, but still registered for events
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Stateless</p>
+                        <aside class="notes">
+                            You usually only hear events, so you need to handle synchronously, and then also in your async block
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Often String-based Event Names</p>
+                        <aside class="notes">
+                            Can make intent of the api a little tough to follow.  There's no self-documenting structure in many cases.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>When to Use</h5>
+                        <p>View/Model Changes</p>
+                        <p>Backbone.js</p>
+                        <p>DOM</p>
+                    </section>
 				</section>
 				<section>
 					<h2>Promises</h2>
+                    <section>
+                        Object that will <i>always</i> either resolve or reject
+                    </section>
+                    <section>
+                        Simplified model of async
+                    </section>
+                    <section>
+                        Run handlers on different threads (if necessary)
+                    </section>
+                    <section>
+                        TODO: ANDROID/JDEFERRED EXAMPLE
+                    </section>
+                    <section>
+                        TODO: JAVASCRIPT EXAMPLE
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Mimics Synchronous Code</p>
+                        <aside class="notes">
+                            Looks like synchronous code
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Error Handling</p>
+                        <aside class="notes">
+                            Easily bubble up typed errors, catch uncaught exceptions.
+
+                            One gotcha - syntax can take a second error handler.  You should still have a good strategy for sending up typed errors or handling them as they occur.  Treat it like Try/Catch rules.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>All Paths Exit</p>
+                        <aside class="notes">
+                            You can't screw up and get stuck.  It will always go to the next block
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Resolve Immedeiately</p>
+                        <aside class="notes">
+                            Return state immediately and still go to the callbacks
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>External Library</p>
+                        <aside class="notes">
+                            Libs implement different versions of what it means to have "Promises". Luckily, most things are converting to follow the Promises/A standard.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Can Discourage Testing "Units"</p>
+                        <aside class="notes">
+                            In practice, it feels a little common to put your code in a promise block and deal with it right there.  This isn't a science, just an observed behavior.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Hard to De-register</p>
+                        <aside class="notes">
+                            In some of the libraries, it can be hard to cancel the promises if your view goes out of scope.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Hard to Write your own Initially</p>
+                        <aside class="notes">
+                            For some reason, the behavior of promises can be a little confusing to write for yourself initially
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>When to Use</h5>
+                        <p>Backend Ajax -> DB Storage</p>
+                        <p>Multiple calls must complete before moving on</p>
+                        <p>Load from file or DB</p>
+                        <p>When it's available (lib included/supported)</p>
+                    </section>
 				</section>
 				<section>
 					<h2>Message Bus</h2>
+                    <section>
+                        Central service for sending and receiving messages
+                    </section>
+                    <section>
+                    	Otto example
+                    </section>
+                    <section>
+                    	jQuery example
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Completely De-Coupled</p>
+                        <aside class="notes">
+                            Neither receivers or publishers know about each other
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Work on front-end/backend independently</p>
+                        <aside class="notes">
+                            Makes it so services can come and go, and anyone can subscribe to events and register themselves
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Components can self-register</p>
+                        <aside class="notes">
+                            You can have an app boot-up that skips the 1 by 1 registration of your app services; they just self register
+                        </aside>
+                    </section>
+                    
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Hard to trace/understand</p>
+                        <aside class="notes">
+                            Searching through the codebase for where events come from can be challenging.  Same with refactoring.
+
+                            Not self-documenting
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Messy Quickly</p>
+                        <aside class="notes">
+                            If this is your only pattern, you'll find you need to be diligent not to publish events from other handlers.  This starts too much of a cascading SOA without a central mechanism to see the flows
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>1 Way</p>
+                        <aside class="notes">
+                        	Not meant for fine-grained state
+                        	If you pub to sub, might get events initiated by something else
+                        
+                            If your event can be broadcast for multiple objects, gets noisy (think blog:updated.  must filter each one by the blog id)
+
+                            Think about posting to the bus about "creating" a new blog.  If you care about the result, you need to subscribe to the "BlogCreated" event, and then figure out if it's yours, or something else.
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Too easy to take too far</p>
+                        <aside class="notes">
+                            You don't want to initiate async events on a hub just to load data.  Only do this for things that you don't care if they're not going to return until later
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>When to use</h5>
+                        <p>System-wide events</p>
+                        <p>Want to handle EVERY event</p>
+                        <p>Cross-model events</p>
+                        <p>If you can easily filter events (not Otto)</p>
+                    </section>
 				</section>
 				<section>
-					<h2>Coroutines</h2>
+					<h2>coroutines</h2>
+                    <section>
+                        Keywords built into language to handle async
+<pre><code>
+  yield, await, async
+</code></pre>
+                        <aside class="notes">
+                            Built-in to EmcaScript 6 (EC6)
+                        </aside>
+                    </section>
+                    <section>
+                        Built into Javascript (EC6), .NET
+                    </section>
+                    <section>
+                    	<pre><code>
+                            TODO: yield example
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Native support</p>
+                        <aside class="notes">
+                            Built right in, so easy to use.
+
+                            In JS, acts like it returns a promise, so you can chain, etc
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Looks synchronous</p>
+                        <aside class="notes">
+                            Much harder to create spaghetti code.  Still has all the benefits of async on the cpu
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Positives</h5>
+                        <p>Easy to read/grasp</p>
+                        <aside class="notes">
+                            Flow of code is easy to spot
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Won't Stop you Nesting</p>
+                        <aside class="notes">
+                            You can still "nest", it's just not quite as verbose.  Still need to think about structuring units of code
+                        </aside>
+                    </section>
+                    <section>
+                        <h5>Negatives</h5>
+                        <p>Not quite ready</p>
+                        <aside class="notes">
+                            Need transpiler in javascript
+                        </aside>
+                    </section>
+
 				</section>
-				<section>
-					<h2>Miscellaneous</h2>
-				</section>
+
+                <section>
+                    <h2>Reactive Programming</h2>
+                    <p>Combo-moves!</p>
+                    <aside class="notes">
+                        Too much for this presentation, but includes
+                    </aside>
+                </section>
 
 				<section>
 					<h2>Tips/Tricks</h2>
@@ -920,6 +1258,9 @@ _makePostAppend: function( params, body, options, next ){
 					</section>
 					<section>
 						Aim for vertical
+						<aside class="notes">
+							Karate chop
+                        </aside>
 					</section>
 					<section>
 						Avoid Diagonal
@@ -927,11 +1268,22 @@ _makePostAppend: function( params, body, options, next ){
 					<section>
 						Focus on readability
 					</section>
+                    <section>
+                        De-register when Views Disappear
+                        <aside class="notes">
+                            If you reference views/elements that might be gone when your callback runs, you may end up killing your app.  This is true of almost every async pattern and is something you need to think about.
+
+                            Backbone handles this for you by inversing the ownership of the model events so that the view holds the registration and will kill them off on destroy.
+                        </aside>
+                    </section>
 					<section>
 						Write testable functions, then add coordination
+						<aside class="notes">
+							This helps to think in terms of little units, as well as testing
+						</aside>
 					</section>
 					<section>
-						Refactor as you write and notice nesting
+						Refactor as you write and notice code nesting
 					</section>
 					<section>
 						Don't be clever.  Use patterns when you need them!!!
@@ -967,7 +1319,7 @@ _makePostAppend: function( params, body, options, next ){
 				center: true,
 				slideNumber: true,
 				keyboard: {
-	              g: 'slide', // go to the next slide when the ENTER key is pressed
+	              g: 'slide' // go to the next slide when the ENTER key is pressed
 	            },
 
 				transition: 'convex', // none/fade/slide/convex/concave/zoom
