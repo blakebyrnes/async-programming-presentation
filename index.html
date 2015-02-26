@@ -34,6 +34,21 @@
             .backgrounds .bg-blur {
                 -webkit-filter: blur(6px) opacity(20%);
             }
+            .backgrounds .bg-fade {
+                -webkit-filter: blur(1px) opacity(60%);
+            }
+            h2.shadow,h3.shadow {
+                text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+            }
+            h2.shadow-light {
+                 text-shadow: 4px 0 4px rgba(255,255,255,0.8);
+             }
+            h2.border-light {
+                  text-shadow: 0 2px  rgba(235,235,235,0.8);
+              }
+            .reveal .dark h3,.reveal .dark h2, .reveal .dark p,.reveal .dark h1, .reveal .dark h5 {
+                color: #fff;
+            }
         </style>
         <!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -73,36 +88,57 @@
 						<h2>Async!</h2>
 						<p>It's more important than you think.</p>
 					</section>
-					<section>
-						<h2>Industry Movement</h2>
-						<p>Rise of Mobile</p>
-						<!-- swap for ios/android devices -->
-						<p>Rise of Single Page Apps</p>
-						<!-- swap for angular/backbone logos -->
-						<p>nodejs</p>
-					</section>
                     <section class="bg-blur" data-background-image="https://www.rickscloud.com/wp-content/uploads/2014/05/rise_of_mobile-1280x880.jpg">
                         <h1>Rise of Mobile</h1>
+                        <aside class="notes">
+                            Poll audience on how many are doing mobile apps, or interested
+                        </aside>
                     </section>
-					<section>
-						<h2>Async...</h2>
-						<p class="fragment">Single callbacks === easy</p>
-						<!-- example showing simple callbacks -->
-						<p class="fragment">Async-style programming => <strong>hard</strong></p>
-						<p class="fragment grow">Thinking asynchronously is hard.  
-But cheer up.  
-Eventually you'll get it!</p>
-						<pre class="fragment"><code>//hard</code></pre>
-						<!-- example showing nested callbacks -->
-						<aside class="notes">
-						- give prize to first person who laughs
-						- possibly put a stewie slide with a "wait for it" face
-						</aside>
-					</section>
-					<section>
+                    <section class="bg-blur" data-background-image="https://d85wutc1n854v.cloudfront.net/live/products/600x375/WB0977873.png?v=1.3">
+                        <h1>Single Page Apps</h1>
+                    </section>
+
+                    <section class="bg-blur" data-background-image="http://media02.hongkiat.com/node-js/node-js.jpg">
+                        <h1>Server Side Javascript</h1>
+                    </section>
+
+                    <section>
+                       	<pre ><code data-trim style="font-size:40px !important">
+$("#button").click(function(e){
+  console.log("handle async.");
+});
+                        </code></pre>
+                        <aside class="notes">
+                            Client side - handle events
+                        </aside>
+                    </section>
+                    <section data-background-image="http://i272.photobucket.com/albums/jj191/cpchristie/EasyButton.jpg">
+                        <aside class="notes">
+                            Some of you are saying, I went to the wrong class. Shit
+
+                            Gets a lot harder when you start orchestrating multiple events
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>Thinking asynchronously is hard...</h2>
+                        <h2 class="fragment">But cheer up, Eventually you'll get it!</h2>
+                    </section>
+                    <section data-background-image="http://1.bp.blogspot.com/-wZfjvyBOpYc/U8MeaUFFFCI/AAAAAAAAAP0/0gRy-R1y638/s1600/Image-53.png">
+                    </section>
+                    <section>
+                        <h2>Eventually you'll get it...</h2>
+                    </section>
+                    <section data-background-transition="slide" data-background-size="80%" data-background-image="http://s2.quickmeme.com/img/73/73d71fab45496a6671d670687eb359dd6293817166ddb699f7e1fb44358bad26.jpg">
+
+                    </section>
+					<section data-theme="black">
 						<h2>You must learn it!</h2>
-						<p>Story Time</p>
+                        <img src="http://quotespics.com/wp-content/quote-images/patience-learn-you-must.jpg"/>
 					</section>
+                    <section data-background="black">
+                        <img src="http://static.fjcdn.com/pictures/You_7900a8_1204562.jpg"/>
+                    </section>
 					<section>
 						<h2>Real Email</h2>
 						<p>"I am working on a appcelerator project for android and I see that the AJAX call  is not synchronous..   And because of this, my function (sic) populating the UI from the AJAX response is failing."</p>
@@ -135,25 +171,26 @@ plugs.populateData();
 
 					</section>
 					<section>
-						<h2>Don't let this happen to your</h2>
+						<h2><strong>Don't let this happen to you</strong></h2>
 					</section>
-					<section >
-						<h2>Add to your toolbelt</h2>
-						<img src="images/toolbelt.jpg"/>
+					<section data-background-image="images/toolbelt.jpg">
+						<h2 class="shadow-light">Add to your toolbelt</h2>
 					</section>
 				</section>
 				<section>
 					<h2>What is async?</h2>
-					<section>
+					<section data-background-image="http://www.blastr.com/sites/blastr/files/styles/blog_post_media/public/running-man-05-g.jpg?itok=RuT52Pum" class="bg-blur">
 						<h4>Code that doesn't wait!</h4>
-						<p>Will execute later</p>
-						<!-- running man picture -->
+						<p style="font-size: 1.5em">Will execute later</p>
+                        <!-- running man picture -->
 						<aside class="notes">
 							Ever thought as you were leaving, "Remember to lock the door", then you did a bunch of other stuff, and then you finally got to the door, and remembered to lock it.  Kinda like that.
 
 							Important to talk about how it doesn't block.  Implication is that it can get more out of the CPU where the code is running
 						</aside>
 					</section>
+                    <section data-transition="fade-in" data-background-image="http://www.blastr.com/sites/blastr/files/styles/blog_post_media/public/running-man-05-g.jpg?itok=RuT52Pum" >
+                     </section>
 					<section>
 						<p>User Interface</p>
 						<!-- show someone about to hit a ui button -->
@@ -206,18 +243,17 @@ console.log(3);
 				</section>
 
 				<section>
-					<h2>The run loop</h2>
-					<section>
-						<p>Running man (running)</p>
-						<p>
-							TODO: create slide showing the 3 bosses.  as he encounters each, start our video stream and broadcast</p>
+					<section data-background-image="http://4.bp.blogspot.com/-qL4EmKpjxrk/UKKGPp2VkTI/AAAAAAABlTM/iGren4CWVaw/s1600/running+man.png" class="dark">
+
+                        <h2>The run loop</h2>
 						<aside class="notes">
-							Back to the running man.  He's going to keep running, until he runs into obstacles.  
-							Viewers are prompted once something is about to happen.  "Wait for execute"
+							Back to the running man.  He's going to keep running, until he runs into obstacles.
+                            <br/>
+                            Viewers are prompted once something is about to happen.  "Wait for execute"
 						</aside>
 					</section>
-					<section>
-						<p>[Run loop picture]</p>
+					<section data-background-image="http://i.stack.imgur.com/BTm1H.png" data-background="rgba(51,51,44, 255) center" data-background-size="contain"
+                            data-background-repeat="no-repeat">
 					</section>
 					<section>
 						<h5>Javascript (aka, the event loop)</h5>
@@ -246,44 +282,39 @@ console.log(3);
 					</section>
 				</section>
 				<section>
-					<h2>Threads</h2>
-					<section>
-						<h5>Is Asynchronous different than Multi-Threading?</h5>
-						<p>Async not <i>necessarily</i> multi-threaded</p>
-						
-						<p>
-							Multi-threading === run heavy process in background
-						</p>
-						<aside class="notes">
-							Language dependent
+					<section class="dark bg-fade" data-background="http://brianschrader.com/images/blog/branches.png">
+						<h3 class="shadow"><strong>Asynchronous === Multi-Threading?</strong></h3>
 
-							If op doesn't require CPU, that operation can be done without spawning another thread (i/o, hardware notification)
+						<aside class="notes">
+                            - Async not <i>necessarily</i> multi-threaded
+                            <br/>
+                            - Multi-threading === run heavy process in background
+                            <br/>
+                            - Language dependent
+                            <br/>
+                            - If op doesn't require CPU, that operation can be done without spawning another thread (i/o, hardware notification)
 
 							<a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-	difference">stack overflow</a>
 						</aside>
 					</section>
-					<section>
-						<p>[Image of threads]</p>
-					</section>
-					<!-- image of  -->
 				</section>
 				<section>
 					<h1>Ok, got it</h1>
 					<h3>Is there anything more?</h3>
 				</section>
-				<section>
-					<h1>You have no idea</h1>
-				</section>
-				<section>
-					<h2>Why is it hard?</h2>
-					
-					<section>
-						<p>Different way of thinking</p>
+                <section data-background-size="contain" data-background="black center" data-background-repeat="no-repeat" data-background-image="http://4.bp.blogspot.com/-Z8e-Y0JcrtQ/UdNzG2ZNoJI/AAAAAAAAQks/yz7rpQ5ItlU/s500/wfg32.gif"></section>
+
+				<section  data-background-color="black" >
+					<h2 style="color:#fff">Why is it hard?</h2>
+                    <section data-background-image="">
+
+                    </section>
+					<section data-background-repeat="no-repeat" data-background-image="http://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Apple_logo_Think_Different_vectorized.svg/2000px-Apple_logo_Think_Different_vectorized.svg.png" data-background-size="contain" data-background="black center" >
+
+						<aside class="notes">Different way of thinking</aside>
 					</section>
 					<section>
-						<p>Back to the Future</p>
-						<img alt="delorean"/>
-
+                        <img src="http://www.blogcdn.com/www.autoblog.com/media/2009/06/bttf_time_machine_ebay_lead.jpg"/>
 						<aside class="notes">
 							Have to start thinking about what will eventually happen.  If this, then this, then this..
 
@@ -292,16 +323,14 @@ console.log(3);
 
 					</section>
 					<section>
-						<p>Functional Programming/Thinking</p>
-						<img alt="functional programming image"/>
+						<img src="http://jordankasper.com/js-testing/images/meme-functions.jpg">
 						<aside class="notes">
 							Break it down into units
 						</aside>
 					</section>
 
 					<section>
-						<p>Your stuff might be gone</p>
-						<img alt="broken into car"/>
+						<img style="margin-top:100px" src="http://www.huckleberrybicycles.com/wp-content/uploads/2012/08/IMG_3576-copy.jpeg"/>
 						<aside class="notes">
 							By the time your "asynchronous" code is done, your view might not be there anymore
 
@@ -318,8 +347,8 @@ console.log(3);
 					<h2>What can go wrong?</h2>
 				</section>
 
-				<section>
-					<h1>Diagonal Coding</h1>
+				<section data-background="black">
+					<img src="images/Heaven-or-Hell-Arrow-Way-Line-Route.jpg"/>
 				</section>
 				<section>
 					<h3>Add 5 new features</h3>
@@ -750,25 +779,25 @@ _makePostAppend: function( params, body, options, next ){
 					</section>
 				</section>
 
-				<section>
+				<section data-background-image="http://www.businessnewsdaily.com/images/i/000/000/415/original/problem-solving.jpg?1323472010" class="bg-blur">
 					<h2>Problems to Solve</h2>
 				</section>
-				<section>
+				<section data-background-image="http://gb.fotolibra.com/images/previews/49824-stages-of-rocket-launching-illustration.jpeg" class="bg-fade">
 					<h2>Long Tasks One After Another</h2>
 					<aside class="notes">
 						think ajax, file uploads
 					</aside>
 				</section>
 
-				<section>
+				<section data-background-image="http://static2.bigstockphoto.com/thumbs/5/6/3/large2/36542230.jpg" class="bg-blur">
 					<h2>Long Tasks at once</h2>
 					<aside class="notes">
 						think ajax, file uploads
 					</aside>
 				</section>
 
-				<section>
-					<h2>Wait for tasks to finish</h2>
+				<section data-background-image="http://i.ytimg.com/vi/d4ExlhrSnG4/maxresdefault.jpg" class="bg-fade">
+					<h2 class="border-light">Wait for tasks to finish</h2>
 					<aside class="notes">
 						after all ajax downloaded, display view
 					</aside>
