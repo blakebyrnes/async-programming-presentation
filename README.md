@@ -1,6 +1,6 @@
 This presentation covers the basics of Asynchronous Programming in Javascript and Android.  #devnexus2015
 
-If you want some good reading, look at my <a href="/RESEARCH.md">research/notes</a> file.
+If you want some good reading, look at my <a href="http://cdn.rawgit.com/blakebyrnes/async-programming-presentation/master/Research.html">research/notes</a> file.
 
 It's built on reveal.js.  To launch the presentation, run the instructions below
 
