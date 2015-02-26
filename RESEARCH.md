@@ -1,7 +1,7 @@
 Questions:
 Promises vs Continuations
 Why callbacks in nodejs vs promises
- -
+
 What’s the difference between async and multithreaded?
 http://stackoverflow.com/questions/21122842/whats-the-difference-between-synchronous-and-asynchronous-calls-in-objective-c
 When you invoke something synchronously, it means that the thread that initiated that operation will wait for the task to finish before continuing. Asynchronous means that it will not wait.
