@@ -30,12 +30,38 @@
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
         <style>
-
+            @-webkit-keyframes blur-anim {
+                from { -webkit-filter: blur(0); }
+                to { -webkit-filter: blur(6px); }
+            }
+            @-webkit-keyframes opac-anim {
+                from { -webkit-filter: opacity(100%); }
+                to { -webkit-filter: opacity(20%); }
+            }
+            @-webkit-keyframes opac-anim-60 {
+                from { -webkit-filter: opacity(100%); }
+                to { -webkit-filter: opacity(60%); }
+            }
+            @-webkit-keyframes fade-in {
+                 from { -webkit-filter: opacity(0%); }
+                 to { -webkit-filter: opacity(100%); }
+             }
+             /*-webkit-animation: blur-anim 2s linear, opac-anim 2s linear; -webkit-animation-direction: alternate;*/
             .backgrounds .bg-blur {
                 -webkit-filter: blur(6px) opacity(20%);
             }
+            .backgrounds .bg-slight-blur {
+                -webkit-filter: blur(2px) opacity(50%);
+            }
+
             .backgrounds .bg-fade {
                 -webkit-filter: blur(1px) opacity(60%);
+            }
+            .backgrounds .bg-big-fade {
+                -webkit-filter: blur(1px) opacity(20%);
+            }
+            !h2 ~ section.hide-title.present,section.hide-title.hide-title.present + h1 {
+                display: none !important;
             }
             h2.shadow,h3.shadow {
                 text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
@@ -48,6 +74,9 @@
               }
             .reveal .dark h3,.reveal .dark h2, .reveal .dark p,.reveal .dark h1, .reveal .dark h5 {
                 color: #fff;
+            }
+            p {
+                font-size: 1.4em !important;
             }
         </style>
         <!--[if lt IE 9]>
@@ -81,24 +110,24 @@
 
 				<!-- -->
 				<section>
-					 <section  class="bg-blur" data-background-image="http://www.surface-tec.com/nanomech/images/nm5.jpg">
+					 <section  class="bg-blur" data-background-image="images/nm5.jpg">
                          <h2>Why are we here?</h2>
 					</section>
 					<section>
 						<h2>Async!</h2>
 						<p>It's more important than you think.</p>
 					</section>
-                    <section class="bg-blur" data-background-image="https://www.rickscloud.com/wp-content/uploads/2014/05/rise_of_mobile-1280x880.jpg">
+                    <section class="bg-blur" data-background-image="images/rise_of_mobile-1280x880.jpg">
                         <h1>Rise of Mobile</h1>
                         <aside class="notes">
                             Poll audience on how many are doing mobile apps, or interested
                         </aside>
                     </section>
-                    <section class="bg-blur" data-background-image="https://d85wutc1n854v.cloudfront.net/live/products/600x375/WB0977873.png?v=1.3">
+                    <section class="bg-blur" data-background-image="images/WB0977873.png">
                         <h1>Single Page Apps</h1>
                     </section>
 
-                    <section class="bg-blur" data-background-image="http://media02.hongkiat.com/node-js/node-js.jpg">
+                    <section class="bg-blur" data-background-image="images/node-js.jpg">
                         <h1>Server Side Javascript</h1>
                     </section>
 
@@ -112,7 +141,7 @@ $("#button").click(function(e){
                             Client side - handle events
                         </aside>
                     </section>
-                    <section data-background-image="http://i272.photobucket.com/albums/jj191/cpchristie/EasyButton.jpg">
+                    <section data-background-image="images/EasyButton.jpg">
                         <aside class="notes">
                             Some of you are saying, I went to the wrong class. Shit
 
@@ -124,20 +153,20 @@ $("#button").click(function(e){
                         <h2>Thinking asynchronously is hard...</h2>
                         <h2 class="fragment">But cheer up, Eventually you'll get it!</h2>
                     </section>
-                    <section data-background-image="http://1.bp.blogspot.com/-wZfjvyBOpYc/U8MeaUFFFCI/AAAAAAAAAP0/0gRy-R1y638/s1600/Image-53.png">
+                    <section data-background-image="images/Image-53.png">
                     </section>
                     <section>
                         <h2>Eventually you'll get it...</h2>
                     </section>
-                    <section data-background-transition="slide" data-background-size="80%" data-background-image="http://s2.quickmeme.com/img/73/73d71fab45496a6671d670687eb359dd6293817166ddb699f7e1fb44358bad26.jpg">
+                    <section data-background-transition="slide" data-background-size="80%" data-background-image="images/73d71fab45496a6671d670687eb359dd6293817166ddb699f7e1fb44358bad26.jpg">
 
                     </section>
 					<section data-theme="black">
 						<h2>You must learn it!</h2>
-                        <img src="http://quotespics.com/wp-content/quote-images/patience-learn-you-must.jpg"/>
+                        <img src="images/patience-learn-you-must.jpg"/>
 					</section>
                     <section data-background="black">
-                        <img src="http://static.fjcdn.com/pictures/You_7900a8_1204562.jpg"/>
+                        <img src="images/You_7900a8_1204562.jpg"/>
                     </section>
 					<section>
 						<h2>Real Email</h2>
@@ -179,7 +208,7 @@ plugs.populateData();
 				</section>
 				<section>
 					<h2>What is async?</h2>
-					<section data-background-image="http://www.blastr.com/sites/blastr/files/styles/blog_post_media/public/running-man-05-g.jpg?itok=RuT52Pum" class="bg-blur">
+					<section data-background-image="images/running-man-05-g.jpg" class="bg-blur">
 						<h4>Code that doesn't wait!</h4>
 						<p style="font-size: 1.5em">Will execute later</p>
                         <!-- running man picture -->
@@ -189,7 +218,7 @@ plugs.populateData();
 							Important to talk about how it doesn't block.  Implication is that it can get more out of the CPU where the code is running
 						</aside>
 					</section>
-                    <section data-transition="fade-in" data-background-image="http://www.blastr.com/sites/blastr/files/styles/blog_post_media/public/running-man-05-g.jpg?itok=RuT52Pum" >
+                    <section data-transition="fade-in" data-background-image="images/running-man-05-g.jpg" >
                      </section>
 					<section>
 						<p>User Interface</p>
@@ -243,7 +272,7 @@ console.log(3);
 				</section>
 
 				<section>
-					<section data-background-image="http://4.bp.blogspot.com/-qL4EmKpjxrk/UKKGPp2VkTI/AAAAAAABlTM/iGren4CWVaw/s1600/running+man.png" class="dark">
+					<section data-background-image="images/running_man.png" class="dark">
 
                         <h2>The run loop</h2>
 						<aside class="notes">
@@ -252,7 +281,7 @@ console.log(3);
                             Viewers are prompted once something is about to happen.  "Wait for execute"
 						</aside>
 					</section>
-					<section data-background-image="http://i.stack.imgur.com/BTm1H.png" data-background="rgba(51,51,44, 255) center" data-background-size="contain"
+					<section data-background-image="images/BTm1H.png" data-background="rgba(51,51,44, 255) center" data-background-size="contain"
                             data-background-repeat="no-repeat">
 					</section>
 					<section>
@@ -282,7 +311,7 @@ console.log(3);
 					</section>
 				</section>
 				<section>
-					<section class="dark bg-fade" data-background="http://brianschrader.com/images/blog/branches.png">
+					<section class="dark bg-fade" data-background="images/branches.png">
 						<h3 class="shadow"><strong>Asynchronous === Multi-Threading?</strong></h3>
 
 						<aside class="notes">
@@ -294,7 +323,7 @@ console.log(3);
                             <br/>
                             - If op doesn't require CPU, that operation can be done without spawning another thread (i/o, hardware notification)
 
-							<a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-	difference">stack overflow</a>
+							<a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-difference">stack overflow</a>
 						</aside>
 					</section>
 				</section>
@@ -302,19 +331,19 @@ console.log(3);
 					<h1>Ok, got it</h1>
 					<h3>Is there anything more?</h3>
 				</section>
-                <section data-background-size="contain" data-background="black center" data-background-repeat="no-repeat" data-background-image="http://4.bp.blogspot.com/-Z8e-Y0JcrtQ/UdNzG2ZNoJI/AAAAAAAAQks/yz7rpQ5ItlU/s500/wfg32.gif"></section>
+                <section data-background-size="contain" data-background="black center" data-background-repeat="no-repeat" data-background-image="images/wfg32.gif"></section>
 
 				<section  data-background-color="black" >
 					<h2 style="color:#fff">Why is it hard?</h2>
                     <section data-background-image="">
 
                     </section>
-					<section data-background-repeat="no-repeat" data-background-image="http://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Apple_logo_Think_Different_vectorized.svg/2000px-Apple_logo_Think_Different_vectorized.svg.png" data-background-size="contain" data-background="black center" >
+					<section data-background-repeat="no-repeat" data-background-image="images/2000px-Apple_logo_Think_Different_vectorized.svg.png" data-background-size="contain" data-background="black center" >
 
 						<aside class="notes">Different way of thinking</aside>
 					</section>
 					<section>
-                        <img src="http://www.blogcdn.com/www.autoblog.com/media/2009/06/bttf_time_machine_ebay_lead.jpg"/>
+                        <img src="images/bttf_time_machine_ebay_lead.jpg"/>
 						<aside class="notes">
 							Have to start thinking about what will eventually happen.  If this, then this, then this..
 
@@ -323,14 +352,14 @@ console.log(3);
 
 					</section>
 					<section>
-						<img src="http://jordankasper.com/js-testing/images/meme-functions.jpg">
+						<img src="images/meme-functions.jpg">
 						<aside class="notes">
 							Break it down into units
 						</aside>
 					</section>
 
 					<section>
-						<img style="margin-top:100px" src="http://www.huckleberrybicycles.com/wp-content/uploads/2012/08/IMG_3576-copy.jpeg"/>
+						<img style="margin-top:100px" src="images/IMG_3576-copy.jpeg"/>
 						<aside class="notes">
 							By the time your "asynchronous" code is done, your view might not be there anymore
 
@@ -779,65 +808,73 @@ _makePostAppend: function( params, body, options, next ){
 					</section>
 				</section>
 
-				<section data-background-image="http://www.businessnewsdaily.com/images/i/000/000/415/original/problem-solving.jpg?1323472010" class="bg-blur">
+				<section data-background-image="images/problem-solving.jpg?1323472010" class="bg-blur">
 					<h2>Problems to Solve</h2>
 				</section>
-				<section data-background-image="http://gb.fotolibra.com/images/previews/49824-stages-of-rocket-launching-illustration.jpeg" class="bg-fade">
+				<section data-background-image="images/49824-stages-of-rocket-launching-illustration.jpeg" class="bg-fade">
 					<h2>Long Tasks One After Another</h2>
 					<aside class="notes">
 						think ajax, file uploads
 					</aside>
 				</section>
 
-				<section data-background-image="http://static2.bigstockphoto.com/thumbs/5/6/3/large2/36542230.jpg" class="bg-blur">
+				<section data-background-image="images/36542230.jpg" class="bg-blur">
 					<h2>Long Tasks at once</h2>
 					<aside class="notes">
 						think ajax, file uploads
 					</aside>
 				</section>
 
-				<section data-background-image="http://i.ytimg.com/vi/d4ExlhrSnG4/maxresdefault.jpg" class="bg-fade">
+				<section data-background-image="images/maxresdefault.jpg" class="bg-fade">
 					<h2 class="border-light">Wait for tasks to finish</h2>
 					<aside class="notes">
 						after all ajax downloaded, display view
 					</aside>
 				</section>
 
-				<section>
-					<h2>Run Task without Blocking UI</h2>
+				<section data-background-image="images/blockin.jpg" class="bg-slight-blur">
+					<h2 class="shadow-light">Run Task without Blocking UI</h2>
 					<aside class="notes">
 						facebook detects dom changes in background (ie, react)
 					</aside>
 				</section>
-				<section>
+                <section data-background-image="images/ui-block.jpg" data-background="black center" data-background-repeat="no-repeat"
+                         data-background-size="contain">
+
+                </section>
+                <section data-background-image="images/54402087.jpg" class="bg-blur">
 					<h2>Handling Errors</h2>
 					<aside class="notes">
 						handle errors that crop up in your application
 						unhandled exceptions, 
 					</aside>
 				</section>
-				<section>
+				<section data-background="white no-repeat contain center" data-background-image="images/workflow.jpeg" class="bg-blur"  >
 					<h2>Dynamic or Complicated Workflows</h2>
 					<aside class="notes">
 						Complicated sequence of activities that have lots of branching and flows might need an event system
 					</aside>
 				</section>
-				<section>
-					<h2>Handling Triggered Events</h2>
+				<section data-background="black no-repeat contain center" data-background-image="images/battery.png" class="dark bg-fade">
+					<h2 class="shadow">Handling Triggered Events</h2>
 					<aside class="notes">
 						System events, UI events, etc.  Handle changes and react to them
 					</aside>
 				</section>
-				
-				<section>
-					<h2>Patterns</h2>
-					<p class="fragment">aka, Great, what do I do with this knowledge?</p>
+
+                <section data-background-image="images/Problems-solving.jpg"
+                        data-background-size="contain" data-background="black center" data-background-repeat="no-repeat">
+
+                </section>
+				<section data-background-image="images/fractal_10.jpg" class="dark bg-fade">
+					<h1>Patterns</h1>
+					<p class="fragment" style="font-size:1.6em">aka, Great, what do I do with this knowledge?</p>
 				</section>
 
-				<section>
+				<section data-background="white">
 					<h2>Callbacks</h2>
-					<section>
-						<p>Call me later</p>
+					<section data-background-image="images/keep-calm-and-call-me-later-1.png" data-background-size="contain" data-background="black center" data-background-repeat="no-repeat" class="bg-big-fade">
+
 					</section>
 					<section>
 						<pre class="smaller"><code>
@@ -871,33 +908,35 @@ _makePostAppend: function( params, body, options, next ){
   });
                         </code></pre>
                         <aside class="notes">
-                            CHEERS!
+                            Java 8 version
 
-                            TODO: slide with applause?
                         </aside>
                     </section>
-					<section>
-						<h5>Positives</h5>
-						<p>Built-in</p>
+                    <section data-background-image="images/Applause-Hands-dreamstime_m_2437415.jpg" class="hide-title" >
+
+                    </section>
+
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                        <h5 class="positives">Positives</h5>
+                        <p>Built-in</p>
 						<aside class="notes">
 							No 3rd party necessary
 						</aside>
 					</section>
-					<section>
+					<section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
 						<h5>Positives</h5>
 						<p>Easy to Read</p>
 					</section>
-					<section>
+					<section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
 						<p>Multiple calls quickly devolve</p>
 						<aside class="notes">
 							Nested calls
 						</aside>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
-						<p>Program stalls if not called</p>
-						<p><i>happens more than you'd expect</i></p>
+						<p>Can Stall</p>
 						<aside class="notes">
 							If you return and forget to call the callback, the code won't ever continue.  This is a fundamental difference from sequential programs.
 						</aside>
@@ -915,19 +954,19 @@ _makePostAppend: function( params, body, options, next ){
 					<section>
 						<p>Add coordination across callbacks</p>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
 						<h5>Positives</h5>
 						<p>Consistent structure for calls</p>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
 						<p>Third Party Library</p>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
 						<p>Enforced Opinion</p>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
 						<p>Still inherit some problems of callbacks</p>
 					</section>
@@ -980,14 +1019,14 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
 						TODO: Android example (listener)
 					</section>
 					<section>
-						<h5>Positives</h5>
+						<h5 class="highlight-green fragment">Positives</h5>
 						<p>Two-way Control</p>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
 						<h5>Positives</h5>
 						<p>Very Clear API (interface)</p>
 					</section>
-					<section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
 						<p>Switching Listener</p>
 					</section>
@@ -1008,14 +1047,14 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                     <section>
                         "Observe" an object's events
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Loose Coupling</p>
                         <aside class="notes">
                             Publisher doesn't know who is listening
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Specific Object of Interest</p>
                         <aside class="notes">
@@ -1026,21 +1065,21 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                         <h5>Positives</h5>
                         <p>One or Many Subscribers</p>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Memory Loops</p>
                         <aside class="notes">
                             View might disappear, but still registered for events
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Stateless</p>
                         <aside class="notes">
                             You usually only hear events, so you need to handle synchronously, and then also in your async block
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Often String-based Event Names</p>
                         <aside class="notes">
@@ -1071,14 +1110,14 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                     <section>
                         TODO: JAVASCRIPT EXAMPLE
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Mimics Synchronous Code</p>
                         <aside class="notes">
                             Looks like synchronous code
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Error Handling</p>
                         <aside class="notes">
@@ -1087,42 +1126,42 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                             One gotcha - syntax can take a second error handler.  You should still have a good strategy for sending up typed errors or handling them as they occur.  Treat it like Try/Catch rules.
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>All Paths Exit</p>
                         <aside class="notes">
                             You can't screw up and get stuck.  It will always go to the next block
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Resolve Immedeiately</p>
                         <aside class="notes">
                             Return state immediately and still go to the callbacks
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>External Library</p>
                         <aside class="notes">
                             Libs implement different versions of what it means to have "Promises". Luckily, most things are converting to follow the Promises/A standard.
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Can Discourage Testing "Units"</p>
                         <aside class="notes">
                             In practice, it feels a little common to put your code in a promise block and deal with it right there.  This isn't a science, just an observed behavior.
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Hard to De-register</p>
                         <aside class="notes">
                             In some of the libraries, it can be hard to cancel the promises if your view goes out of scope.
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Hard to Write your own Initially</p>
                         <aside class="notes">
@@ -1148,29 +1187,29 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                     <section>
                     	jQuery example
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Completely De-Coupled</p>
                         <aside class="notes">
                             Neither receivers or publishers know about each other
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Work on front-end/backend independently</p>
                         <aside class="notes">
                             Makes it so services can come and go, and anyone can subscribe to events and register themselves
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Components can self-register</p>
                         <aside class="notes">
                             You can have an app boot-up that skips the 1 by 1 registration of your app services; they just self register
                         </aside>
                     </section>
-                    
-                    <section>
+
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Hard to trace/understand</p>
                         <aside class="notes">
@@ -1179,16 +1218,16 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                             Not self-documenting
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Messy Quickly</p>
                         <aside class="notes">
                             If this is your only pattern, you'll find you need to be diligent not to publish events from other handlers.  This starts too much of a cascading SOA without a central mechanism to see the flows
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
-                        <p>1 Way</p>
+                        <p>1-way</p>
                         <aside class="notes">
                         	Not meant for fine-grained state
                         	If you pub to sub, might get events initiated by something else
@@ -1198,7 +1237,7 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                             Think about posting to the bus about "creating" a new blog.  If you care about the result, you need to subscribe to the "BlogCreated" event, and then figure out if it's yours, or something else.
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Too easy to take too far</p>
                         <aside class="notes">
@@ -1232,7 +1271,7 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                             TODO: yield example
                         </code></pre>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Native support</p>
                         <aside class="notes">
@@ -1241,28 +1280,28 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                             In JS, acts like it returns a promise, so you can chain, etc
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Looks synchronous</p>
                         <aside class="notes">
                             Much harder to create spaghetti code.  Still has all the benefits of async on the cpu
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Easy to read/grasp</p>
                         <aside class="notes">
                             Flow of code is easy to spot
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Won't Stop you Nesting</p>
                         <aside class="notes">
                             You can still "nest", it's just not quite as verbose.  Still need to think about structuring units of code
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
                         <p>Not quite ready</p>
                         <aside class="notes">
