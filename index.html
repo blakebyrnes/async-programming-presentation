@@ -69,7 +69,7 @@
             h2.shadow-light {
                  text-shadow: 4px 0 4px rgba(255,255,255,0.8);
              }
-            h2.border-light {
+            h2.border-light,p.border-light {
                   text-shadow: 0 2px  rgba(235,235,235,0.8);
               }
             .reveal .dark h3,.reveal .dark h2, .reveal .dark p,.reveal .dark h1, .reveal .dark h5 {
@@ -811,8 +811,11 @@ _makePostAppend: function( params, body, options, next ){
 				<section data-background-image="images/problem-solving.jpg?1323472010" class="bg-blur">
 					<h2>Problems to Solve</h2>
 				</section>
+
 				<section data-background-image="images/49824-stages-of-rocket-launching-illustration.jpeg" class="bg-fade">
 					<h2>Long Tasks One After Another</h2>
+
+                    <img class="fragment" width="400px" height="300px" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS2hBhG_Y9prT3SyUfOf0atlzx9U2gc90L3Q8dTirJ7F8w9tB8_wsLNg7k"/>
 					<aside class="notes">
 						think ajax, file uploads
 					</aside>
@@ -951,7 +954,7 @@ _makePostAppend: function( params, body, options, next ){
 				</section>
 				<section>
 					<h2>Callback Libraries</h2>
-					<section>
+					<section data-background-image="http://media-1.web.britannica.com/eb-media/58/154558-004-DB68FE47.jpg" class="bg-blur">
 						<p>Add coordination across callbacks</p>
 					</section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
@@ -970,61 +973,210 @@ _makePostAppend: function( params, body, options, next ){
 						<h5>Negatives</h5>
 						<p>Still inherit some problems of callbacks</p>
 					</section>
-					<section>
-						<h5>javascript</h5>
-						<p>async.js</p>
-						TODO: quick example
-					</section>
-					<section>
-						<h5>Android</h5>
-						<p>Bolts</p>
-						<pre class="smallest stretch" ><code>
-ParseQuery<ParseObject> query = ParseQuery.getQuery("Comments");
+                </section>
+
+                <section>
+                    <section>
+                        <h2>javascript - async.js</h2>
+                        <pre class="smaller"><code class="javascript" >
+//nodejs style functions
+function(err, data){
+
+  //err is always first
+  next(err);
+
+  //if no error, call with null or undefined
+  next(null, result);
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>async.js - parallel</h2>
+                        <pre class="smaller stretch"><code class="javascript" data-trim>
+async.parallel([
+  function downloadBlog(next){
+    downloadBlogAComments(next);
+  },
+  function downloadUsers(next){
+    downloadBlogAUsers(next);
+  }
+], function done(err, results){
+    if (err) return alert(err);
+    var blogWithComments = results[0];
+    var users = results[1];
+    display(blogWithComments, users);
+});
+
+//limit concurrent runners
+async.parallelLimit([...], 5, cb);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>async.js - waterfall</h2>
+                        <pre class="smaller stretch"><code class="javascript" data-trim>
+async.waterfall([
+  function download(next){
+    getBlog(next);
+  },
+  function users(blog, next){
+    getBlogUsers(blog, next);
+  },
+  function avatars(blog, users, next){
+    getUserAvatars(function(err, avatars){
+      next(err, blog, users, avatars);
+    });
+  }
+], function done(err, blog, users, avatars){
+    if (err) return alert(err);
+    display(blog, users, avatars);
+});
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>async.js - more</h2>
+                       <ul style="font-size: 1.5em">
+                           <li>map</li>
+                           <li>filter</li>
+                           <li>each</li>
+                           <li>eachSeries</li>
+                           <li>[much more]</li>
+                       </ul>
+                    </section>
+                </section>
+                <section>
+                    <h2>Android - Bolts</h2>
+                    <pre class="smaller stretch">
+                       <code class="Java" style="font-size: 0.9em; line-height: 1.5em">
+saveAsync(obj).continueWith(new Continuation&lt;ParseObject, Void>() {
+  public Void then(Task&lt;ParseObject> task) throws Exception {
+    if (task.isCancelled()) {
+      // the save was cancelled.
+    } else if (task.isFaulted()) {
+      // the save failed.
+      Exception error = task.getError()
+    } else {
+      // the object was saved successfully.
+      ParseObject object = task.getResult();
+    }
+    return null;
+  }
+});
+                       </code>
+                    </pre>
+                </section>
+                <section>
+                    <h2>Android - Bolts: Series</h2>
+                    <pre class="smallest stretch" ><code data-trim>
+ParseQuery&lt;ParseObject> query = ParseQuery.getQuery("Comments");
 query.whereEqualTo("post", 123);
 
-findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>>() {
-  public Task<Void> then(Task<List<ParseObject>> results) throws Exception {
-    // Collect one task for each delete into an array.
-    ArrayList<Task<Void>> tasks = new ArrayList<Task<Void>>();
-    for (ParseObject result : results) {
-      // Start this delete immediately and add its task to the list.
-      tasks.add(deleteAsync(result));
+findAsync(query).continueWithTask(new Continuation&lt;List&lt;ParseObject>, Task&lt;Void>>() {
+  public Task&lt;Void> then(Task&lt;List&lt;ParseObject>> results) throws Exception {
+
+    // Create a trivial completed task as a base case.
+    Task&lt;Void> task = Task.forResult(null);
+    for (final ParseObject result : results) {
+
+      // For each item, extend the task with a function to delete the item.
+      task = task.continueWithTask(new Continuation&lt;Void, Task&lt;Void>>() {
+        public Task&lt;Void> then(Task&lt;Void> ignored) throws Exception {
+          // Return a task that will be marked as completed when the delete is finished.
+          return deleteAsync(result);
+        }
+      });
     }
-    // Return a new task that will be marked as completed when all of the deletes are
-    // finished.
-    return Task.whenAll(tasks);
+    return task;
   }
-}).onSuccess(new Continuation<Void, Void>() {
-  public Void then(Task<Void> ignored) throws Exception {
+}).continueWith(new Continuation&lt;Void, Void>() {
+  public Void then(Task&lt;Void> ignored) throws Exception {
     // Every comment was deleted.
     return null;
   }
 });
-						</code></pre>
-                        <aside class="notes">
-                            https://github.com/BoltsFramework/Bolts-Android
-                        </aside>
-					</section>
-				</section>
+                    </code></pre>
+                    <aside class="notes">
+                        https://github.com/BoltsFramework/Bolts-Android
+                    </aside>
+                </section>
 
-				<section>
-					<h2>Delegation Pattern</h2>
-					<section>
-						Hand off control to 1 other actor
+				<section data-background="white">
+					<section data-background-image="http://www.dadychery.org/wp-content/uploads/2012/07/puppet-master.png" class="bg-slight-blur">
+                        <h2>Delegation Pattern</h2>
+						<p>Hand off control to 1 other actor</p>
 						<aside class="notes">
 						Android: think, registering activity callback when an action happens in a fragment (clicked on button)
 						</aside>
 					</section>
 					<section>
-						TODO: Android example (listener)
+                        <h2>Delegation Pattern</h2>
+                        <pre class="smallest stretch" ><code data-trim>
+public interface FragmentListener {
+  public void buttonClicked();
+  public boolean shouldAcceptClick();
+  public void valueChanged(int value);
+}
+
+public GameViewActivity extends Activity implements FragmentListener {
+   ...
+
+  @Override
+  public boolean shouldAcceptClick() {
+    return isAdmin && isFormFilledOut;
+  }
+
+  @Override
+  public void buttonClicked(){
+    startActivity(...);
+  }
+
+  @Override
+  public void valueChanged(int value){
+    this.value = value;
+    this.isFormFilledOut = (value != 0);
+  }
+}
+                        </code></pre>
 					</section>
+
 					<section>
-						<h5 class="highlight-green fragment">Positives</h5>
+                        <h2>Delegation Pattern</h2>
+                        <pre class="smallest stretch" ><code data-trim>
+public GameFragment extends Fragment {
+  private FragmentListener listener;
+  ...
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    try {
+        listener = (FragmentListener) activity;
+    } catch (ClassCastException e) {
+        throw new ClassCastException(activity.toString()
+                            + " must implement FragmentListener");
+    }
+  }
+  @Override
+  public void onClick(View v) {
+    listener.buttonClicked();
+  }
+
+  ...
+}
+                        </code></pre>
+					</section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+						<h5>Positives</h5>
 						<p>Two-way Control</p>
+                        <aside class="notes">
+                            Not just subscribing - can send data, request data, etc
+                        </aside>
 					</section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
 						<h5>Positives</h5>
 						<p>Very Clear API (interface)</p>
+                        <aside class="notes">
+                            Self documenting.  Advantage over some other patterns
+                        </aside>
 					</section>
                     <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
 						<h5>Negatives</h5>
@@ -1032,20 +1184,20 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
 					</section>
 					<section>
 						<h5>When to use</h5>
-						<p>Clear pattern that needs to be handled by listener</p>
-						<p>One listener/actor</p>
-					</section>
-					<section>
-						<h5>When to use</h5>
-						<p>UI Component 1-to-1 "Worker"</p>
-						<p>"Instance" of service layer</p>
-						<p>Service layer coupled to single view</p>
+						<p class="fragment">View 1-to-1 with "worker"</p>
+						<p class="fragment">Service "instance"</p>
+
+                        <aside class="notes">
+                            UI Component - if your component has one "presenter" or driver, it can use a delegate pattern to communciate effectively back and forth
+                            Service Instance - you CAN use this pattern to allow works to subscribe to callbacks when things download/succeed.  See iOS NSURLSession handlers on the original class
+                            Coupling - also applicable if you have a service that is ONLY ever going to be for one view
+                        </aside>
 					</section>
 				</section>
 				<section>
 					<h2>Observer Pattern</h2>
-                    <section>
-                        "Observe" an object's events
+                    <section data-background-image="http://scifiempire.net/wordpress/wp-content/uploads/2011/09/Observer.png" class="bg-fade">
+                        <p>"Observe" an object's events</p>
                     </section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
@@ -1088,27 +1240,230 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                     </section>
                     <section>
                         <h5>When to Use</h5>
-                        <p>View/Model Changes</p>
-                        <p>Backbone.js</p>
-                        <p>DOM</p>
+                        <p class="fragment">View/Model Changes</p>
+                        <p class="fragment">Backbone.js</p>
+                        <p class="fragment">DOM</p>
                     </section>
 				</section>
-				<section>
-					<h2>Promises</h2>
+				<section data-background="white">
                     <section>
-                        Object that will <i>always</i> either resolve or reject
+                        <h2>Promises</h2>
                     </section>
                     <section>
-                        Simplified model of async
+                        <p>Simplified model of async</p>
+                        <aside class="notes">
+                            NOTE: has a compliant spec
+                            Go into "what it is"
+                        </aside>
                     </section>
                     <section>
-                        Run handlers on different threads (if necessary)
+                        <p>OPTIONAL: Multi-threaded</p>
+                    </section>
+                    <section data-background="center" data-background-image="images/wonka.jpg" data-background-repeat="no-repeat" data-background-size="contain">
+                    </section>
+                    <section data-background="center" data-background-image="images/wonka.jpg" class="bg-fade" data-background-repeat="no-repeat" data-background-size="contain">
+                        <p class="border-light ">Object that will <i>always</i> either resolve or reject</p>
                     </section>
                     <section>
-                        TODO: ANDROID/JDEFERRED EXAMPLE
+                        <p>A promise must be in one of three states:</p>
+                        <ul style="font-size:1.4em">
+                            <li>pending</li>
+                            <li>fulfilled</li>
+                            <li>rejected</li>
+                        </ul>
+                    </section>
+                    <section data-background-image="http://farm6.staticflickr.com/5114/6929697914_0fd3bd4457_b.jpg" data-background-size="contain">
+                        <aside class="notes">
+                            Immutable
+                        </aside>
                     </section>
                     <section>
-                        TODO: JAVASCRIPT EXAMPLE
+                        <h2>Pyramid of Doom</h2>
+                        <pre><code>
+step1(function (value1) {
+  step2(value1, function(value2)
+    step3(value2, function(value3) {
+      step4(value3, function(value4) {
+        // Do something with value4
+      });
+    });
+  });
+});
+                        </code></pre>
+                    </section>
+                    <section data-background-image="http://moviemezzanine.com/wp-content/uploads/Indiana-Jones-and-the-Temple-of-Doom-Mola-Ram-Amrish-Puri-heart.png" data-background-size="contain">
+
+                    </section>
+                    <section>
+                        <h2>Q - javascript</h2>
+                        <pre class="stretch"><code>
+  Q.fcall(promisedStep1)
+  .then(promisedStep2)
+  .then(promisedStep3)
+  .then(promisedStep4)
+  .then(function (value4) {
+    //Do something with value4
+  })
+  .catch(function (error) {
+    //Handle errors from ANY above steps
+  })
+  .done();
+                        </code></pre>
+                        <aside class="notes">
+                            Ending a promise chain makes sure that, if an error doesn’t get handled before the end, it will get rethrown and reported.
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>What's in a promise?</h2>
+                        <pre class="stretch"><code class="javascript" data-trim>
+ //create
+ var deferred = Q.defer();
+
+ FS.readFile("foo.txt", "utf-8",
+   function (error, text) {
+     if (error) {
+        deferred.reject(new Error(error));
+     } else {
+        deferred.resolve(text);
+     }
+   });
+
+ //return the promise (not the result)
+ return deferred.promise;
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Node-ify</h2>
+                        <pre><code class="javascript">
+ return Q.nfcall(FS.readFile,
+                 "foo.txt",
+                 "utf-8");
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Return types</h2>
+                        <pre class="stretch smaller"><code class="javascript" data-trim>
+ function authenticate() {
+   return getUsername()
+    .then(function (username) {
+      //naive cache
+      var cachedUser = cache[username];
+      // --> returns synchronous params
+      return [username, user];
+    })
+    .spread(function (username, user) {
+       // --> returns synchronous user
+       if (user) return user;
+
+       // --> returns promise
+       return getUser(username);
+    })
+    .then(function (user) {
+       ...
+                        </code></pre>
+                        <aside class="notes">
+                            Important because it lets you chain.  One time you return a promise, another it's a direct object
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Concurrent</h2>
+                        <pre><code class="java">
+return Q.all([
+    eventualAdd(2, 2),
+    eventualAdd(10, 20)
+]);
+                        </code></pre>
+                        <aside class="notes">
+                            Works with runnable, callable, future
+                        </aside>
+                    </section>
+                    <section>
+                        <h1>Android</h1>
+                        <h2>JDeferred</h2>
+                        <aside class="notes">
+                            NOTE: not Promise/A+ spec compliant
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Promise callbacks</h2>
+                        <pre><code class="java">
+  .then(…)
+  .done(…)
+  .fail(…)
+  .progress(…)
+  .always(…)
+                        </code></pre>
+                        <aside class="notes">
+                            Works with runnable, callable, future
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Combined callbacks</h2>
+                        <pre><code class="java">
+  .when(p1, p2, p3, …).then(…)
+                        </code></pre>
+                        <aside class="notes">
+                            Run multiple promises concurrently, wait for finish
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Load from DB or WEB</h2>
+                        <pre class="stretch smallest"><code class="java" data-trim>
+
+Promise promise = blogDAO.loadFromDB(blogId);
+
+promise.then(new DonePipe&ltBlog, Throwable, Void, Void>() {
+  @Override
+  public Promise&ltBlog, Throwable, Void> onDone(Blog blog) {
+    if (blog != null) {
+       return new DeferredObject&ltBlog, Throwable, Void>()
+                        .resolve(blog);
+    } else {
+       return blogRestService.loadBlog(blogId);
+    }
+  }
+})
+.done(new DoneCallback&ltBlog>() {
+  @Override
+  public void onDone(Blog rejection) {
+    //display blog
+  }
+})
+.fail(new FailCallback&ltThrowable>() {
+  @Override
+  public void onFail(Throwable exception) {
+    //handles any thrown exceptions
+  }
+});
+
+                        </code></pre>
+                    </section>
+                    <section data-background-image="http://i.cdn.turner.com/dr/hln/www/release/sites/default/files/2012/08/10/mckayladisappointed.jpg">
+
+                    </section>
+
+                    <section>
+                        <h2>LAMBDAS!</h2>
+                        <pre class="stretch smaller"><code class="java" data-trim>
+
+return blogDAO.loadFromDB(blogId)
+ .then( (blog, throwable) -> {
+   if (blog != null)
+     //resolve immediate
+     return new DeferredObject&ltBlog, Throwable, Void>()
+                        .resolve(blog);
+   else
+     //resolve later
+     return blogRestService.loadBlog(blogId);
+ })
+ .done(blog ->
+   //display blog
+ })
+ .fail(exception -> {
+   //handles any thrown exceptions
+ });
+
+                        </code></pre>
                     </section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
@@ -1163,40 +1518,86 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                     </section>
                     <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
-                        <p>Hard to Write your own Initially</p>
+                        <p>Hard to Write your Own Initially</p>
                         <aside class="notes">
                             For some reason, the behavior of promises can be a little confusing to write for yourself initially
                         </aside>
                     </section>
                     <section>
                         <h5>When to Use</h5>
-                        <p>Backend Ajax -> DB Storage</p>
-                        <p>Multiple calls must complete before moving on</p>
-                        <p>Load from file or DB</p>
-                        <p>When it's available (lib included/supported)</p>
+                        <p class="fragment">Backend Ajax -> DB Storage</p>
+                        <p class="fragment">Coordinated Async Calls </p>
+                        <p class="fragment">When It's Available</p>
+                        <aside class="notes">
+                            JS - Built into ec6
+                            JS - Built into Chrome 32, Opera 19 & Firefox 29 (small polyfill exists)
+                            Android - when you can use retrolamda and RxJava is too much for you
+                        </aside>
                     </section>
 				</section>
 				<section>
-					<h2>Message Bus</h2>
                     <section>
+                        <h2>Message Bus</h2>
                         Central service for sending and receiving messages
                     </section>
                     <section>
-                    	Otto example
+                    	<h2>Android - Otto</h2>
+                        <pre class="smaller "><code class="java">
+bus.post(new AnswerEvent(42));
+
+...
+
+@Subscribe
+public void answerAvailable(AnswerEvent event){
+  // TODO: React to the event somehow!
+}
+                        </code></pre>
                     </section>
                     <section>
-                    	jQuery example
+                        <h2>Javascript - postal.js</h2>
+                        <pre class="smaller "><code class="javascript">
+var subscription = postal.subscribe({
+  channel: "orders",
+  topic: "item.add",
+  callback: function(data, envelope) {
+     //handle item added
+  }
+});
+                        </code></pre>
+                        <aside class="notes">
+                            data has the passed through data
+                            envelope has sent timestamp, channel, etc
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Javascript - postal.js</h2>
+                        <pre class="smaller "><code class="javascript">
+postal.publish({
+  channel: "orders",
+  topic: "item.add",
+  data: {
+    sku: "AZDTF4346",
+    qty: 21
+  }
+});
+                        </code></pre>
+                        <aside class="notes">
+                            data has the passed through data
+                            envelope has sent timestamp, channel, etc
+                        </aside>
                     </section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Completely De-Coupled</p>
                         <aside class="notes">
                             Neither receivers or publishers know about each other
+
+                            Can be a nice design, and the alure of completely decoupled views/models/controllers excites a certain type of dev
                         </aside>
                     </section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
-                        <p>Work on front-end/backend independently</p>
+                        <p>Views/models/services work independently</p>
                         <aside class="notes">
                             Makes it so services can come and go, and anyone can subscribe to events and register themselves
                         </aside>
@@ -1211,7 +1612,7 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
 
                     <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
-                        <p>Hard to trace/understand</p>
+                        <p>Hard to trace publish origins</p>
                         <aside class="notes">
                             Searching through the codebase for where events come from can be challenging.  Same with refactoring.
 
@@ -1220,15 +1621,26 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                     </section>
                     <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
-                        <p>Messy Quickly</p>
+                        <p>Needs developer limits</p>
                         <aside class="notes">
-                            If this is your only pattern, you'll find you need to be diligent not to publish events from other handlers.  This starts too much of a cascading SOA without a central mechanism to see the flows
+                            Avoid "pub" to "sub"..
+                            Events shouldn't really publish other events
+                            This starts too much of a cascading SOA without a central mechanism to see the flows
+                            You don't want to initiate async events on a hub just to load data.  Only do this for things that you don't care if they're not going to return until later
                         </aside>
                     </section>
                     <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
-                        <p>1-way</p>
+                        <p>Stateless</p>
                         <aside class="notes">
+                            Can get confused for something that "should" have state, and if it's your only way to get the state, you're going to start "asking" things of the bus
+                        </aside>
+                    </section>
+                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
+                        <h5>Negatives</h5>
+                        <p>Should be a "part" of your architecture, not the only pattern</p>
+                        <aside class="notes">
+                            Combine this with the observer.  Once you want updates for a certain object, you should be listening to that object.
                         	Not meant for fine-grained state
                         	If you pub to sub, might get events initiated by something else
                         
@@ -1237,40 +1649,204 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
                             Think about posting to the bus about "creating" a new blog.  If you care about the result, you need to subscribe to the "BlogCreated" event, and then figure out if it's yours, or something else.
                         </aside>
                     </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Too easy to take too far</p>
-                        <aside class="notes">
-                            You don't want to initiate async events on a hub just to load data.  Only do this for things that you don't care if they're not going to return until later
-                        </aside>
-                    </section>
                     <section>
                         <h5>When to use</h5>
-                        <p>System-wide events</p>
-                        <p>Want to handle EVERY event</p>
-                        <p>Cross-model events</p>
-                        <p>If you can easily filter events (not Otto)</p>
+                        <p class="fragment">System-wide events</p>
+                        <p class="fragment">Inter-module communication</p>
+                        <p class="fragment">Want to handle EVERY event</p>
+                        <p class="fragment">Library   allows easy filtering</p>
+                        <aside class="notes">
+                            System-wide events: think battery, network error occurred, user logged out, user logged in, startup device, app resumed, etc
+                            Inter-Module Communication: communicate across views so they're not coupled, across libraries
+                            Every event: don't want to constantly filter on everything ideally.  If you have a "subject", better to emit events about that subject (Observer)
+                            Easily filtered: don't want a tough lib to handle getting out the bad messgaes
+                        </aside>
                     </section>
 				</section>
 				<section>
-					<h2>coroutines</h2>
                     <section>
-                        Keywords built into language to handle async
-<pre><code>
-  yield, await, async
+                        <h2>Generators</h2>
+                        <p>Keywords built into language to handle async</p>
+<pre><code data-trim>
+   yield, await, async
 </code></pre>
                         <aside class="notes">
-                            Built-in to EmcaScript 6 (EC6)
+                            Built-in to EmcaScript 6 (EC6), .NET
+
+                            Also sometimes called coroutines.
+
+                            Generators are "shallow" coroutines that return promises
+
+                            But coroutines would allow yielding in nested functions, which could modify your current objects without you knowing it
+                            http://calculist.org/blog/2011/12/14/why-coroutines-wont-work-on-the-web/
+
+                            //promises with generators
+                            http://blogs.atlassian.com/2013/11/harmony-generators-and-promises-for-node-js-async-fun-and-profit/
+
                         </aside>
                     </section>
-                    <section>
-                        Built into Javascript (EC6), .NET
-                    </section>
-                    <section>
-                    	<pre><code>
-                            TODO: yield example
-                        </code></pre>
-                    </section>
+				<section>
+					<h3>Old Example</h3>
+					<pre class="smallest stretch" ><code>
+fs.readdir(source, function(err, files) {
+  if (err) {
+    console.log('Error finding files: ' + err);
+  } else {
+    files.forEach(function(filename, fileIndex) {
+      console.log(filename);
+      gm(source + filename).size(function(err, values) {
+        if (err) {
+          console.log('Error identifying file size: ' + err)
+        } else {
+          console.log(filename + ' : ' + values);
+          aspect = (values.width / values.height);
+          widths.forEach(function(width, widthIndex) {
+            height = Math.round(width / aspect);
+            console.log('resizing ' + filename + 'to ' + height + 'x' + height);
+            var fn = destination + 'w' + width + '_' + filename;
+            this.resize(width, height).write(fn, function(err) {
+              if (err) console.log('Error writing file: ' + err);
+            });
+          }.bind(this));
+        }
+      });
+    });
+  }
+});
+                    </code></pre>
+				</section>
+
+				<section>
+					<h3>With yield & EC6</h3>
+					<pre class="smallest stretch" ><code>
+try {
+  var file = yield fs.readdir(source);
+
+  var values, aspect;
+  for (var filename of arr) {
+    values = yield (gm(source + filename).size());
+    aspect = (values.width / values.height);
+    for (var width of widths) {
+      height = Math.round(width / aspect);
+
+      console.log('resizing ' + filename + 'to ' + height + 'x' + height);
+
+      var fn = destination + 'w' + width + '_' + filename;
+      yield this.resize(width, height).write(fn);
+    }
+  }
+} catch(err){
+  if (err) console.log('Error resizing file: ' + err);
+  //NOTE: could choose to catch more granularly
+}
+                    </code></pre>
+                    <aside class="notes">
+                        actually will execute in different order (probably slower) than previous.  yield will pause each time, instead of running each foreach function without waiting
+
+                        there is a little bit of code to make these functions
+                    </aside>
+				</section>
+				<section>
+                    <h3>Old Example</h3>
+					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
+var blog = {};
+$.get('/blogs/1', function(data){
+  blog = data;
+
+  $.get('/users/' + data.authorId, function(author){
+    blog.author = author;
+  });
+
+  $.get('/blogs/1/comments', function(comments){
+    blog.comments = comments;
+    comments.forEach(function(comment){
+      $.get('/users/' + data.authorId, function(author){
+        comment.author = author;
+      });
+    });
+  });
+});
+                    </code></pre>
+				</section>
+
+				<section>
+                    <h3>With yield & EC6</h3>
+					<pre class="smaller stretch"><code>
+ var blog = yield $.get('/blogs/1');
+ blog.author = yield $.get('/users/' + blog.authorId);
+ blog.comments = yield $.get('/blogs/1/comments');
+ for (var comment of blog.comments){
+   var url = '/users/' + comment.authorId;
+   comment.author = yield $.get(url);
+ }
+                    </code></pre>
+				</section>
+				<section>
+                    <h3>How it actually works</h3>
+					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
+function* test() {
+    console.log('Hello!');
+    var x = yield undefined;
+    console.log('First I got: ' + x);
+    var y = yield undefined;
+    console.log('Then I got: ' + y);
+}
+var tester = test();
+tester.next(); // prints 'Hello!'
+tester.next('a cat'); // prints 'First I got: a cat'
+tester.next('a dog'); // prints 'Then I got: a dog'
+                    </code></pre>
+				</section>
+
+				<section>
+                    <h3>Helpers</h3>
+					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
+ function coroutine(f) {
+    var o = f(); // instantiate the coroutine
+    o.next(); // execute until the first yield
+    return function(x) {
+        o.next(x);
+    }
+ }
+                    </code></pre>
+				</section>
+
+                <section>
+                    <h3>Yield Promises!</h3>
+					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
+ function request(url) {
+    return new Promise(function(resolve,reject){
+        // pass an error-first style callback
+        makeAjaxCall(url, function(err,text){
+            if (err) reject(err);
+            else resolve(text);
+        });
+    });
+ }
+                    </code></pre>
+                    <aside class="notes">
+                        Taken from site of david walsh - html5 consultant
+                        http://davidwalsh.name/async-generators
+                    </aside>
+                </section>
+
+				<section>
+                    <h3>Promising</h3>
+					<pre class="smaller stretch"><code>
+ var blogComponents = yield Promise.all([
+    request('/blogs/1'),
+    request('/users/' + blog.authorId),
+    request('/blogs/1/comments')]);
+
+ var blog = blogComponents[0];
+ blog.author = blogComponents[1];
+ blog.comments = blogComponents[2];
+ for (var comment of blog.comments){
+   var url = '/users/' + comment.authorId;
+   comment.author = yield request(url);
+ }
+                    </code></pre>
+				</section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>Native support</p>
@@ -1370,6 +1946,19 @@ findAsync(query).continueWithTask(new Continuation<List<ParseObject>, Task<Void>
 					     - React to Individual Model/View: observer
 					</section>
 				</section>
+                <section>
+                    <section>
+                        What does it all mean?
+                    </section>
+                    <section>
+                        ** Ideal architecture (obviously subjective)
+                        Use Promises/Coordinated callbacks to download things in order, prompt downloads
+                        Auto-deregister listeners for callbacks when your view disappears, but keep running in background to complete request if necessary (ie, save to db)
+                        Once models are available, use observer pattern to listen for updates
+                        Observer pattern for reacting to view elements
+                        Message Hub for logout, prompt login, location change, "single truth" state changes, user actions if necessary
+                    </section>
+                </section>
 			</div>
 		</div>
 
