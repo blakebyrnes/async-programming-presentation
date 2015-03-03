@@ -1195,9 +1195,59 @@ public GameFragment extends Fragment {
 					</section>
 				</section>
 				<section>
-					<h2>Observer Pattern</h2>
                     <section data-background-image="http://scifiempire.net/wordpress/wp-content/uploads/2011/09/Observer.png" class="bg-fade">
-                        <p>"Observe" an object's events</p>
+                        <h2 class="border-light">Observer Pattern</h2>
+                        <p  class="border-light">"Observe" an object's state changes</p>
+
+                        <aside class="notes">
+                            Observers register themselves with the subject.
+                            Subject maintains the list of its  dependents (Observers), and it broadcast notification  to all its dependents when it’s state changes.
+                            Observers de-register explicitly when they no more want to be notified.
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Backbone.js</h2>
+                        <pre class="smaller stretch"><code>
+ //view
+ initialize: function() {
+   this.listenTo(this.model, 'change', this.render);
+   this.listenTo(this.model, 'destroy', this.remove);
+ },
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Adding Observability</h2>
+                        <pre class="smaller stretch"><code>
+ var EventEmitter = require('events').EventEmitter;
+ var util = require('util');
+
+ var MyModule = {};
+ EventEmitter.call(MyModule);
+ util.inherits(MyModule, EventEmitter);
+
+ MyModule.set = function(elems){
+   this._set(elems);
+   this.emit('change', elems);
+ }
+ ...
+
+ var myModule = require('modules/mymodule');
+ myModule.on('change', function(){...
+                        </code></pre>
+                        <aside class="notes">
+                            EventEmitter is a NodeJS lib
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Android</h2>
+                        <pre class="smaller"><code>
+textField.addTextChangedListener(this);
+@Override
+public void afterTextChanged(Editable s) {
+    String value = s.getText().toString();
+}
+                        </code></pre>
                     </section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
@@ -1226,7 +1276,7 @@ public GameFragment extends Fragment {
                     </section>
                     <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
                         <h5>Negatives</h5>
-                        <p>Stateless</p>
+                        <p>Can Only Register to Observe Future</p>
                         <aside class="notes">
                             You usually only hear events, so you need to handle synchronously, and then also in your async block
                         </aside>
@@ -1241,8 +1291,9 @@ public GameFragment extends Fragment {
                     <section>
                         <h5>When to Use</h5>
                         <p class="fragment">View/Model Changes</p>
-                        <p class="fragment">Backbone.js</p>
+                        <p class="fragment">Backbone.js/Frameworks</p>
                         <p class="fragment">DOM</p>
+                        <p class="fragment">Lots of other places</p>
                     </section>
 				</section>
 				<section data-background="white">
@@ -1529,7 +1580,7 @@ return blogDAO.loadFromDB(blogId)
                         <p class="fragment">Coordinated Async Calls </p>
                         <p class="fragment">When It's Available</p>
                         <aside class="notes">
-                            JS - Built into ec6
+                            JS - Built into es6
                             JS - Built into Chrome 32, Opera 19 & Firefox 29 (small polyfill exists)
                             Android - when you can use retrolamda and RxJava is too much for you
                         </aside>
@@ -1664,291 +1715,41 @@ postal.publish({
                     </section>
 				</section>
 				<section>
-                    <section>
-                        <h2>Generators</h2>
-                        <p>Keywords built into language to handle async</p>
+                    <h2>Generators</h2>
+                    <p>Keywords built into language to handle async</p>
 <pre><code data-trim>
-   yield, await, async
+yield, await, async
 </code></pre>
-                        <aside class="notes">
-                            Built-in to EmcaScript 6 (EC6), .NET
-
-                            Also sometimes called coroutines.
-
-                            Generators are "shallow" coroutines that return promises
-
-                            But coroutines would allow yielding in nested functions, which could modify your current objects without you knowing it
-                            http://calculist.org/blog/2011/12/14/why-coroutines-wont-work-on-the-web/
-
-                            //promises with generators
-                            http://blogs.atlassian.com/2013/11/harmony-generators-and-promises-for-node-js-async-fun-and-profit/
-
-                        </aside>
-                    </section>
-				<section>
-					<h3>Old Example</h3>
-					<pre class="smallest stretch" ><code>
-fs.readdir(source, function(err, files) {
-  if (err) {
-    console.log('Error finding files: ' + err);
-  } else {
-    files.forEach(function(filename, fileIndex) {
-      console.log(filename);
-      gm(source + filename).size(function(err, values) {
-        if (err) {
-          console.log('Error identifying file size: ' + err)
-        } else {
-          console.log(filename + ' : ' + values);
-          aspect = (values.width / values.height);
-          widths.forEach(function(width, widthIndex) {
-            height = Math.round(width / aspect);
-            console.log('resizing ' + filename + 'to ' + height + 'x' + height);
-            var fn = destination + 'w' + width + '_' + filename;
-            this.resize(width, height).write(fn, function(err) {
-              if (err) console.log('Error writing file: ' + err);
-            });
-          }.bind(this));
-        }
-      });
-    });
-  }
-});
-                    </code></pre>
-				</section>
-
-				<section>
-					<h3>With yield & EC6</h3>
-					<pre class="smallest stretch" ><code>
-try {
-  var file = yield fs.readdir(source);
-
-  var values, aspect;
-  for (var filename of arr) {
-    values = yield (gm(source + filename).size());
-    aspect = (values.width / values.height);
-    for (var width of widths) {
-      height = Math.round(width / aspect);
-
-      console.log('resizing ' + filename + 'to ' + height + 'x' + height);
-
-      var fn = destination + 'w' + width + '_' + filename;
-      yield this.resize(width, height).write(fn);
-    }
-  }
-} catch(err){
-  if (err) console.log('Error resizing file: ' + err);
-  //NOTE: could choose to catch more granularly
-}
-                    </code></pre>
                     <aside class="notes">
-                        actually will execute in different order (probably slower) than previous.  yield will pause each time, instead of running each foreach function without waiting
+                        Built-in to EmcaScript 6 (ES6), .NET
 
-                        there is a little bit of code to make these functions
-                    </aside>
-				</section>
-				<section>
-                    <h3>Old Example</h3>
-					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
-var blog = {};
-$.get('/blogs/1', function(data){
-  blog = data;
+                        Also sometimes called coroutines.
 
-  $.get('/users/' + data.authorId, function(author){
-    blog.author = author;
-  });
+                        Generators are "shallow" coroutines that return promises
 
-  $.get('/blogs/1/comments', function(comments){
-    blog.comments = comments;
-    comments.forEach(function(comment){
-      $.get('/users/' + data.authorId, function(author){
-        comment.author = author;
-      });
-    });
-  });
-});
-                    </code></pre>
-				</section>
+                        But coroutines would allow yielding in nested functions, which could modify your current objects without you knowing it
+                        http://calculist.org/blog/2011/12/14/why-coroutines-wont-work-on-the-web/
 
-				<section>
-                    <h3>With yield & EC6</h3>
-					<pre class="smaller stretch"><code>
- var blog = yield $.get('/blogs/1');
- blog.author = yield $.get('/users/' + blog.authorId);
- blog.comments = yield $.get('/blogs/1/comments');
- for (var comment of blog.comments){
-   var url = '/users/' + comment.authorId;
-   comment.author = yield $.get(url);
- }
-                    </code></pre>
-				</section>
-				<section>
-                    <h3>How it actually works</h3>
-					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
-function* test() {
-    console.log('Hello!');
-    var x = yield undefined;
-    console.log('First I got: ' + x);
-    var y = yield undefined;
-    console.log('Then I got: ' + y);
-}
-var tester = test();
-tester.next(); // prints 'Hello!'
-tester.next('a cat'); // prints 'First I got: a cat'
-tester.next('a dog'); // prints 'Then I got: a dog'
-                    </code></pre>
-				</section>
+                        //promises with generators
+                        http://blogs.atlassian.com/2013/11/harmony-generators-and-promises-for-node-js-async-fun-and-profit/
 
-				<section>
-                    <h3>Helpers</h3>
-					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
- function coroutine(f) {
-    var o = f(); // instantiate the coroutine
-    o.next(); // execute until the first yield
-    return function(x) {
-        o.next(x);
-    }
- }
-                    </code></pre>
-				</section>
-
-                <section>
-                    <h3>Yield Promises!</h3>
-					<pre class="smaller stretch" ><code style="font-size:25px !important; line-height:30px">
- function request(url) {
-    return new Promise(function(resolve,reject){
-        // pass an error-first style callback
-        makeAjaxCall(url, function(err,text){
-            if (err) reject(err);
-            else resolve(text);
-        });
-    });
- }
-                    </code></pre>
-                    <aside class="notes">
-                        Taken from site of david walsh - html5 consultant
-                        http://davidwalsh.name/async-generators
                     </aside>
                 </section>
 
-				<section>
-                    <h3>Promising</h3>
-					<pre class="smaller stretch"><code>
- var blogComponents = yield Promise.all([
-    request('/blogs/1'),
-    request('/users/' + blog.authorId),
-    request('/blogs/1/comments')]);
-
- var blog = blogComponents[0];
- blog.author = blogComponents[1];
- blog.comments = blogComponents[2];
- for (var comment of blog.comments){
-   var url = '/users/' + comment.authorId;
-   comment.author = yield request(url);
- }
-                    </code></pre>
-				</section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Native support</p>
-                        <aside class="notes">
-                            Built right in, so easy to use.
-
-                            In JS, acts like it returns a promise, so you can chain, etc
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Looks synchronous</p>
-                        <aside class="notes">
-                            Much harder to create spaghetti code.  Still has all the benefits of async on the cpu
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Easy to read/grasp</p>
-                        <aside class="notes">
-                            Flow of code is easy to spot
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Won't Stop you Nesting</p>
-                        <aside class="notes">
-                            You can still "nest", it's just not quite as verbose.  Still need to think about structuring units of code
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Not quite ready</p>
-                        <aside class="notes">
-                            Need transpiler in javascript
-                        </aside>
-                    </section>
-
-				</section>
-
-                <section>
-                    <h2>Reactive Programming</h2>
-                    <p>Combo-moves!</p>
+                <section data-background-image="images/superstreetfighter2.jpg" class="bg-fade">
+                    <h2 class="border-light">Reactive Programming</h2>
                     <aside class="notes">
-                        Too much for this presentation, but includes
+                        Combos of all of the above
+
+                        Too much for this presentation, but includes promises, observer pattern, chaining, and other functional programming
+
+                        about how the learning curve feels
                     </aside>
                 </section>
 
-				<section>
-					<h2>Tips/Tricks</h2>
-					<section>
-						2 deep!
-					</section>
-					<section>
-						Aim for vertical
-						<aside class="notes">
-							Karate chop
-                        </aside>
-					</section>
-					<section>
-						Avoid Diagonal
-					</section>
-					<section>
-						Focus on readability
-					</section>
-                    <section>
-                        De-register when Views Disappear
-                        <aside class="notes">
-                            If you reference views/elements that might be gone when your callback runs, you may end up killing your app.  This is true of almost every async pattern and is something you need to think about.
-
-                            Backbone handles this for you by inversing the ownership of the model events so that the view holds the registration and will kill them off on destroy.
-                        </aside>
-                    </section>
-					<section>
-						Write testable functions, then add coordination
-						<aside class="notes">
-							This helps to think in terms of little units, as well as testing
-						</aside>
-					</section>
-					<section>
-						Refactor as you write and notice code nesting
-					</section>
-					<section>
-						Don't be clever.  Use patterns when you need them!!!
-					</section>
-					<section>
-						Choose your own adventure... once
-						<aside class="notes">
-						Avoid too many patterns at once (choose your own adventure)
-						</aside>
-					</section>
-					<section>
-						Choose the pattern that fits your problem-set:
-						 - System Wide: message bus
-						 - Downloads/Waterfall Events: Promises/Callback Coordinators
-						 - Random Events: message bus/state machine
-					     - React to Individual Model/View: observer
-					</section>
-				</section>
-                <section>
-                    <section>
-                        What does it all mean?
+                <section data-background="white">
+                    <section class="dark " data-background-image="http://deanneleblanc.com/wp-content/uploads/2013/02/Bowron-Lake-Rainbow-double-fin-web.jpg">
+                        <h2 class="shadow fragment">What does it all mean?</h2>
                     </section>
                     <section>
                         ** Ideal architecture (obviously subjective)
@@ -1957,8 +1758,65 @@ tester.next('a dog'); // prints 'Then I got: a dog'
                         Once models are available, use observer pattern to listen for updates
                         Observer pattern for reacting to view elements
                         Message Hub for logout, prompt login, location change, "single truth" state changes, user actions if necessary
+                        <aside class="notes">
+
+                            Choose the pattern that fits your problem-set:
+                            - System Wide: message bus
+                            - Downloads/Waterfall Events: Promises/Callback Coordinators
+                            - Random Events: message bus/state machine
+                            - React to Individual Model/View: observer
+                        </aside>
                     </section>
                 </section>
+
+				<section data-background="white">
+					<section class="bg-fade" data-background-image="http://i0.wp.com/co.agencyspotter.com/wp-content/uploads/caseybluefletch.jpg?resize=550%2C366">
+                        <h1 class="border-light">Tips/Tricks</h1>
+					</section>
+					<section>
+						<h2>2 deep!</h2>
+                        <aside class="notes">
+                            Refactor as you write and notice code nesting
+                        </aside>
+					</section>
+					<section data-background-image="http://www.muscleandfitness.com/sites/muscleandfitness.com/files/styles/full_node_image_1090x614/public/karate-snap-wood.jpg?itok=zC6sesVW" data-background-size="cover" data-background-repeat="no-repeat" class="bg-fade">
+						<h2>Aim for vertical</h2>
+						<aside class="notes">
+							Karate chop
+                        </aside>
+					</section>
+					<section data-background-image="http://images.sodahead.com/polls/000235551/polls_600px_No_sign.svg_0345_947560_answer_2_xlarge.png" data-background-size="contain">
+                        <h2>Avoid Diagonal</h2>
+					</section>
+					<section>
+                        <h2>Focus on <span style="-webkit-filter: blur(4px);">Readability</span></h2>
+					</section>
+                    <section>
+                        <h2>De-register when Views Disappear</h2>
+                        <aside class="notes">
+                            If you reference views/elements that might be gone when your callback runs, you may end up killing your app.  This is true of almost every async pattern and is something you need to think about.
+
+                            Backbone handles this for you by inversing the ownership of the model events so that the view holds the registration and will kill them off on destroy.
+                        </aside>
+                    </section>
+					<section>
+						<h2>Write testable functions</h2>
+                        <p class="fragment">Then add coordination</p>
+						<aside class="notes">
+							This helps to think in terms of little units, as well as testing
+						</aside>
+					</section>
+					<section data-background-image="http://fishcommunitysolutions.files.wordpress.com/2012/07/wheel.png" data-background-repeat="no-repeat" class="bg-slight-blur">
+						<h2>Don't be clever.</h2>
+                        <aside class="notes">
+                            Use patterns when you need them!!!
+
+                            Use libraries that exist - you'll end up breaking something
+
+                            If you invent something, you will probably be the only one that understands it.
+                        </aside>
+					</section>
+				</section>
 			</div>
 		</div>
 
