@@ -1923,10 +1923,7 @@ yield, await, async
 				progress: true,
 				history: true,
 				center: true,
-				slideNumber: true,
-				keyboard: {
-	              g: 'slide' // go to the next slide when the ENTER key is pressed
-	            },
+				slideNumber: false,
 
 				transition: 'convex', // none/fade/slide/convex/concave/zoom
 
@@ -1940,7 +1937,12 @@ yield, await, async
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
-
+            Reveal.configure({
+                keyboard: {
+                    13: 'next', // go to the next slide when the ENTER key is pressed
+                    39 : 'next'
+                }
+            });
 		</script>
 
 	</body>
