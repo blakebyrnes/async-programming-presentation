@@ -96,42 +96,88 @@
 					<p>
 						<small>Created by <a href="http://bluefletch.com">Blake Byrnes</a> / <a href="http://twitter.com/blakebyrnes">@blakebyrnes</a></small>
 					</p>
+                    <aside class="notes">
+                        <br/>Basics
+                        <br/>Pitfalls
+                        <br/>Patterns
+                    </aside>
 				</section>
 
-				<section>
+				<section class="bg-big-fade" data-background-image="images/caseybluefletch.jpg">
 					<h2>Who am I?</h2>
+                    <h3>Blake Byrnes</h3>
 					<h4>
 						CTO of BlueFletch Mobile
 					</h4>
-					<p>
-						I work with: <em>iOS, Android, nodejs, html5/ionic/cordova, AWS and sometimes .NET, Backend Java</em>
-					</p>
+					<q>
+						I work with: <em>iOS, Android, nodejs, html5/ionic/cordova, AWS and sometimes .NET, backend Java</em>
+					</q>
 				</section>
+
+                <section>
+                    <h2>Agenda</h2>
+                    <ul>
+                        <li>Why present on async</li>
+                        <li>What is it</li>
+                        <li>What can go wrong</li>
+                        <li>Where async is used</li>
+                        <li>Patterns</li>
+                        <li>Tips and Tricks</li>
+                        <li>Questions</li>
+                    </ul>
+                </section>
+
+                <section class="dark" data-background-image="images/1d5741309ea65303b436ce736f0acca10c88b06552b42184650cb8b4119e036b.jpg">
+                    <h2 class="shadow">Why are you here?</h2>
+                    <aside class="notes">
+                        Poll group - why are you here
+                    </aside>
+                </section>
+
+                <section data-background-image="images/Napoleon-Dynamite-skills-gif.gif" data-background-size="contain" data-background="white center" data-background-repeat="no-repeat"
+                        >
+                    <aside class="notes">
+                        All know skills are important, what are yours?
+                        <br/>Poll group - language skills
+                    </aside>
+                </section>
 
 				<!-- -->
 				<section>
 					 <section  class="bg-blur" data-background-image="images/nm5.jpg">
-                         <h2>Why are we here?</h2>
-					</section>
-					<section>
-						<h2>Async!</h2>
-						<p>It's more important than you think.</p>
+                         <h2>Why I think we're here</h2>
+                         <aside class="notes">
+                             Shifts going on in industry.  Building more API-based back-ends, rich front-ends with multiple clients
+
+                         </aside>
 					</section>
                     <section class="bg-blur" data-background-image="images/rise_of_mobile-1280x880.jpg">
                         <h1>Rise of Mobile</h1>
                         <aside class="notes">
                             Poll audience on how many are doing mobile apps, or interested
+                            <br/><br/>
+                            Inherently asynchronous env (threading no longer your concern like backend)
                         </aside>
                     </section>
                     <section class="bg-blur" data-background-image="images/WB0977873.png">
                         <h1>Single Page Apps</h1>
+                        <aside class="notes">
+                            Angular, Backbone, ExtJS (enterprise), PhoneGap (Ionic)
+                            <br/><br/>
+                            Ask how many people are working with one of these
+                        </aside>
                     </section>
 
                     <section class="bg-blur" data-background-image="images/node-js.jpg">
                         <h1>Server Side Javascript</h1>
+                        <aside class="notes">
+
+                            Javascript is eating the world
+                        </aside>
                     </section>
 
                     <section>
+                        <h3>But I already know async...</h3>
                        	<pre ><code data-trim style="font-size:40px !important">
 $("#button").click(function(e){
   console.log("handle async.");
@@ -144,10 +190,14 @@ $("#button").click(function(e){
                     <section data-background-image="images/EasyButton.jpg">
                         <aside class="notes">
                             Some of you are saying, I went to the wrong class. Shit
-
-                            Gets a lot harder when you start orchestrating multiple events
                         </aside>
                     </section>
+                    <section class="dark" data-background-image="images/4.jpg">
+                        <h2>It Gets Complicated Quickly</h2>
+                        <aside class="notes">
+                            Gets a lot harder when you start orchestrating multiple events
+                        </aside>
+                     </section>
 
                     <section>
                         <h2>Thinking asynchronously is hard...</h2>
@@ -171,6 +221,9 @@ $("#button").click(function(e){
 					<section>
 						<h2>Real Email</h2>
 						<p>"I am working on a appcelerator project for android and I see that the AJAX call  is not synchronous..   And because of this, my function (sic) populating the UI from the AJAX response is failing."</p>
+                        <aside class="notes">
+                            Is this familiar for anyone?
+                        </aside>
 					</section>
 					<section>
 						<p>Pseudo-code</p>
@@ -214,7 +267,7 @@ plugs.populateData();
                         <!-- running man picture -->
 						<aside class="notes">
 							Ever thought as you were leaving, "Remember to lock the door", then you did a bunch of other stuff, and then you finally got to the door, and remembered to lock it.  Kinda like that.
-
+                            <br/><br/>
 							Important to talk about how it doesn't block.  Implication is that it can get more out of the CPU where the code is running
 						</aside>
 					</section>
@@ -346,7 +399,7 @@ console.log(3);
                         <img src="images/bttf_time_machine_ebay_lead.jpg"/>
 						<aside class="notes">
 							Have to start thinking about what will eventually happen.  If this, then this, then this..
-
+                            <br/><br/>
 							Log a function to occur eventually, written now
 						</aside>
 
@@ -362,7 +415,7 @@ console.log(3);
 						<img style="margin-top:100px" src="images/IMG_3576-copy.jpeg"/>
 						<aside class="notes">
 							By the time your "asynchronous" code is done, your view might not be there anymore
-
+                            <br/><br/>
 							Android example (activity requests a network resource, puts in a callback handler, gone when it returns)
 						</aside>
 					</section>
@@ -789,10 +842,10 @@ _makePostAppend: function( params, body, options, next ){
 						<p class="fragment">Ajax</p>
 						<p class="fragment">System Changes</p>
 						<aside class="notes">
-							UI - broadcast events
-							Models - staet changes
-							Ajax - complete/error
-							System - wifi, location, battery changes
+							UI - broadcast events<br/>
+							Models - staet changes<br/>
+							Ajax - complete/error<br/>
+							System - wifi, location, battery changes<br/>
 						</aside>
 					</section>
 					<section>
@@ -801,9 +854,9 @@ _makePostAppend: function( params, body, options, next ){
 						<p class="fragment">Controllers</p>
 						<p class="fragment">Models</p>
 						<aside class="notes">
-							Views - update when state changes
-							Controllers - direct action on events
-							Models - change when other models change
+							Views - update when state changes<br/>
+							Controllers - direct action on events<br/>
+							Models - change when other models change<br/>
 						</aside>
 					</section>
 				</section>
@@ -848,7 +901,7 @@ _makePostAppend: function( params, body, options, next ){
                 <section data-background-image="images/54402087.jpg" class="bg-blur">
 					<h2>Handling Errors</h2>
 					<aside class="notes">
-						handle errors that crop up in your application
+						handle errors that crop up in your application<br/>
 						unhandled exceptions, 
 					</aside>
 				</section>
@@ -954,7 +1007,7 @@ _makePostAppend: function( params, body, options, next ){
 				</section>
 				<section>
 					<h2>Callback Libraries</h2>
-					<section data-background-image="http://media-1.web.britannica.com/eb-media/58/154558-004-DB68FE47.jpg" class="bg-blur">
+					<section data-background-image="images/154558-004-DB68FE47.jpg" class="bg-blur">
 						<p>Add coordination across callbacks</p>
 					</section>
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
@@ -1045,8 +1098,7 @@ async.waterfall([
                 </section>
                 <section>
                     <h2>Android - Bolts</h2>
-                    <pre class="smaller stretch">
-                       <code class="Java" style="font-size: 0.9em; line-height: 1.5em">
+                    <pre class="smaller stretch"><code class="Java" style="font-size: 0.9em; line-height: 1.5em">
 saveAsync(obj).continueWith(new Continuation&lt;ParseObject, Void>() {
   public Void then(Task&lt;ParseObject> task) throws Exception {
     if (task.isCancelled()) {
@@ -1061,12 +1113,11 @@ saveAsync(obj).continueWith(new Continuation&lt;ParseObject, Void>() {
     return null;
   }
 });
-                       </code>
-                    </pre>
+                       </code></pre>
                 </section>
                 <section>
                     <h2>Android - Bolts: Series</h2>
-                    <pre class="smallest stretch" ><code data-trim>
+                    <pre class="smallest stretch"><code data-trim>
 ParseQuery&lt;ParseObject> query = ParseQuery.getQuery("Comments");
 query.whereEqualTo("post", 123);
 
@@ -1100,7 +1151,7 @@ findAsync(query).continueWithTask(new Continuation&lt;List&lt;ParseObject>, Task
                 </section>
 
 				<section data-background="white">
-					<section data-background-image="http://www.dadychery.org/wp-content/uploads/2012/07/puppet-master.png" class="bg-slight-blur">
+					<section data-background-image="images/puppet-master.png" class="bg-slight-blur">
                         <h2>Delegation Pattern</h2>
 						<p>Hand off control to 1 other actor</p>
 						<aside class="notes">
@@ -1188,21 +1239,21 @@ public GameFragment extends Fragment {
 						<p class="fragment">Service "instance"</p>
 
                         <aside class="notes">
-                            UI Component - if your component has one "presenter" or driver, it can use a delegate pattern to communciate effectively back and forth
-                            Service Instance - you CAN use this pattern to allow works to subscribe to callbacks when things download/succeed.  See iOS NSURLSession handlers on the original class
-                            Coupling - also applicable if you have a service that is ONLY ever going to be for one view
+                            UI Component - if your component has one "presenter" or driver, it can use a delegate pattern to communciate effectively back and forth<br/>
+                            Service Instance - you CAN use this pattern to allow works to subscribe to callbacks when things download/succeed.  See iOS NSURLSession handlers on the original class<br/>
+                            Coupling - also applicable if you have a service that is ONLY ever going to be for one view<br/>
                         </aside>
 					</section>
 				</section>
 				<section>
-                    <section data-background-image="http://scifiempire.net/wordpress/wp-content/uploads/2011/09/Observer.png" class="bg-fade">
+                    <section data-background-image="images/Observer.png" class="bg-fade">
                         <h2 class="border-light">Observer Pattern</h2>
                         <p  class="border-light">"Observe" an object's state changes</p>
 
                         <aside class="notes">
-                            Observers register themselves with the subject.
-                            Subject maintains the list of its  dependents (Observers), and it broadcast notification  to all its dependents when it’s state changes.
-                            Observers de-register explicitly when they no more want to be notified.
+                            Observers register themselves with the subject.<br/>
+                            Subject maintains the list of its  dependents (Observers), and it broadcast notification  to all its dependents when it’s state changes.<br/>
+                            Observers de-register explicitly when they no more want to be notified.<br/>
                         </aside>
                     </section>
                     <section>
@@ -1323,7 +1374,7 @@ public GameFragment extends Fragment {
                             <li>rejected</li>
                         </ul>
                     </section>
-                    <section data-background-image="http://farm6.staticflickr.com/5114/6929697914_0fd3bd4457_b.jpg" data-background-size="contain">
+                    <section data-background-image="images/6929697914_0fd3bd4457_b.jpg" data-background-size="contain">
                         <aside class="notes">
                             Immutable
                         </aside>
@@ -1342,7 +1393,7 @@ step1(function (value1) {
 });
                         </code></pre>
                     </section>
-                    <section data-background-image="http://moviemezzanine.com/wp-content/uploads/Indiana-Jones-and-the-Temple-of-Doom-Mola-Ram-Amrish-Puri-heart.png" data-background-size="contain">
+                    <section data-background-image="images/Indiana-Jones-and-the-Temple-of-Doom-Mola-Ram-Amrish-Puri-heart.png" data-background-size="contain">
 
                     </section>
                     <section>
@@ -1489,7 +1540,7 @@ promise.then(new DonePipe&ltBlog, Throwable, Void, Void>() {
 
                         </code></pre>
                     </section>
-                    <section data-background-image="http://i.cdn.turner.com/dr/hln/www/release/sites/default/files/2012/08/10/mckayladisappointed.jpg">
+                    <section data-background-image="images/mckayladisappointed.jpg">
 
                     </section>
 
@@ -1528,7 +1579,7 @@ return blogDAO.loadFromDB(blogId)
                         <p>Error Handling</p>
                         <aside class="notes">
                             Easily bubble up typed errors, catch uncaught exceptions.
-
+                            <br/><br/>
                             One gotcha - syntax can take a second error handler.  You should still have a good strategy for sending up typed errors or handling them as they occur.  Treat it like Try/Catch rules.
                         </aside>
                     </section>
@@ -1580,9 +1631,9 @@ return blogDAO.loadFromDB(blogId)
                         <p class="fragment">Coordinated Async Calls </p>
                         <p class="fragment">When It's Available</p>
                         <aside class="notes">
-                            JS - Built into es6
-                            JS - Built into Chrome 32, Opera 19 & Firefox 29 (small polyfill exists)
-                            Android - when you can use retrolamda and RxJava is too much for you
+                            JS - Built into es6<br/>
+                            JS - Built into Chrome 32, Opera 19 & Firefox 29 (small polyfill exists)<br/>
+                            Android - when you can use retrolamda and RxJava is too much for you<br/>
                         </aside>
                     </section>
 				</section>
@@ -1616,7 +1667,7 @@ var subscription = postal.subscribe({
 });
                         </code></pre>
                         <aside class="notes">
-                            data has the passed through data
+                            data has the passed through data<br/>
                             envelope has sent timestamp, channel, etc
                         </aside>
                     </section>
@@ -1666,7 +1717,7 @@ postal.publish({
                         <p>Hard to trace publish origins</p>
                         <aside class="notes">
                             Searching through the codebase for where events come from can be challenging.  Same with refactoring.
-
+                            <br/><br/>
                             Not self-documenting
                         </aside>
                     </section>
@@ -1674,9 +1725,9 @@ postal.publish({
                         <h5>Negatives</h5>
                         <p>Needs developer limits</p>
                         <aside class="notes">
-                            Avoid "pub" to "sub"..
-                            Events shouldn't really publish other events
-                            This starts too much of a cascading SOA without a central mechanism to see the flows
+                            Avoid "pub" to "sub"..<br/>
+                            Events shouldn't really publish other events<br/>
+                            This starts too much of a cascading SOA without a central mechanism to see the flows<br/>
                             You don't want to initiate async events on a hub just to load data.  Only do this for things that you don't care if they're not going to return until later
                         </aside>
                     </section>
@@ -1691,12 +1742,12 @@ postal.publish({
                         <h5>Negatives</h5>
                         <p>Should be a "part" of your architecture, not the only pattern</p>
                         <aside class="notes">
-                            Combine this with the observer.  Once you want updates for a certain object, you should be listening to that object.
-                        	Not meant for fine-grained state
+                            Combine this with the observer.  Once you want updates for a certain object, you should be listening to that object.<br/>
+                        	Not meant for fine-grained state<br/>
                         	If you pub to sub, might get events initiated by something else
-                        
+                            <br/><br/>
                             If your event can be broadcast for multiple objects, gets noisy (think blog:updated.  must filter each one by the blog id)
-
+                            <br/><br/>
                             Think about posting to the bus about "creating" a new blog.  If you care about the result, you need to subscribe to the "BlogCreated" event, and then figure out if it's yours, or something else.
                         </aside>
                     </section>
@@ -1707,14 +1758,15 @@ postal.publish({
                         <p class="fragment">Want to handle EVERY event</p>
                         <p class="fragment">Library   allows easy filtering</p>
                         <aside class="notes">
-                            System-wide events: think battery, network error occurred, user logged out, user logged in, startup device, app resumed, etc
-                            Inter-Module Communication: communicate across views so they're not coupled, across libraries
-                            Every event: don't want to constantly filter on everything ideally.  If you have a "subject", better to emit events about that subject (Observer)
-                            Easily filtered: don't want a tough lib to handle getting out the bad messgaes
+                            System-wide events: think battery, network error occurred, user logged out, user logged in, startup device, app resumed, etc<br/>
+                            Inter-Module Communication: communicate across views so they're not coupled, across libraries<br/>
+                            Every event: don't want to constantly filter on everything ideally.  If you have a "subject", better to emit events about that subject (Observer)<br/>
+                            Easily filtered: don't want a tough lib to handle getting out the bad messages<br/>
                         </aside>
                     </section>
 				</section>
-				<section>
+				<section  data-background="white center" class="bg-blur" data-background-image="images/yield_sign_page.png"
+                        data-background-size="contain" data-background-repeat="no-repeat">
                     <h2>Generators</h2>
                     <p>Keywords built into language to handle async</p>
 <pre><code data-trim>
@@ -1722,14 +1774,14 @@ yield, await, async
 </code></pre>
                     <aside class="notes">
                         Built-in to EmcaScript 6 (ES6), .NET
-
+                        <br/><br/>
                         Also sometimes called coroutines.
-
+                        <br/><br/>
                         Generators are "shallow" coroutines that return promises
-
+                        <br/><br/>
                         But coroutines would allow yielding in nested functions, which could modify your current objects without you knowing it
                         http://calculist.org/blog/2011/12/14/why-coroutines-wont-work-on-the-web/
-
+                        <br/><br/>
                         //promises with generators
                         http://blogs.atlassian.com/2013/11/harmony-generators-and-promises-for-node-js-async-fun-and-profit/
 
@@ -1740,37 +1792,70 @@ yield, await, async
                     <h2 class="border-light">Reactive Programming</h2>
                     <aside class="notes">
                         Combos of all of the above
-
+                        <br/><br/>
                         Too much for this presentation, but includes promises, observer pattern, chaining, and other functional programming
-
+                        <br/><br/>
                         about how the learning curve feels
                     </aside>
                 </section>
 
                 <section data-background="white">
-                    <section class="dark " data-background-image="http://deanneleblanc.com/wp-content/uploads/2013/02/Bowron-Lake-Rainbow-double-fin-web.jpg">
-                        <h2 class="shadow fragment">What does it all mean?</h2>
+                    <section class=" bg-fade" data-background-image="images/Copyoferase.jpg">
+                        <h2 class="shadow ">Ok, how do I use this?</h2>
                     </section>
                     <section>
-                        ** Ideal architecture (obviously subjective)
-                        Use Promises/Coordinated callbacks to download things in order, prompt downloads
-                        Auto-deregister listeners for callbacks when your view disappears, but keep running in background to complete request if necessary (ie, save to db)
-                        Once models are available, use observer pattern to listen for updates
-                        Observer pattern for reacting to view elements
-                        Message Hub for logout, prompt login, location change, "single truth" state changes, user actions if necessary
+                        <h2>Services</h2>
+                        <p>Promises/Callback Coordinators</p>
+                        <p>Message Bus</p>
                         <aside class="notes">
-
-                            Choose the pattern that fits your problem-set:
-                            - System Wide: message bus
-                            - Downloads/Waterfall Events: Promises/Callback Coordinators
-                            - Random Events: message bus/state machine
-                            - React to Individual Model/View: observer
+                            Use promises or coordinators to have your db and rest calls coordinated
+                            <br/><br/>
+                            Message bus for significant events
+                            <br/><br/>
+                            Ignore callbacks if out of scope
                         </aside>
+                    </section>
+                    <section>
+                        <h2>Models</h2>
+                        <p>Observable</p>
+                        <p>Promises</p>
+
+                        <aside class="notes">
+                            Publish events when things change (to listeners of one model)
+                            <br/>
+                            If your model has events itself, use promises or more observables to allow CRUD
+
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Views/Controllers</h2>
+                        <p>Observable</p>
+                        <p>Observer</p>
+                        <p>Message Bus</p>
+                        <aside class="notes">
+                            Observe model state
+                            <br/>
+                            Publish view events to subscribers
+                            <br/>
+                            Publish user events across views with message bus
+                            <br/>
+                            Interact directly with service layer
+                        </aside>
+                    </section>
+
+                    <section>
+                        <h2>System Services</h2>
+                        <p>Observable</p>
+                        <p>Message Bus</p>
+                        <aside class="notes">
+                            Either directly observer, or get and broadcast with a service
+                        </aside>
+                    </section>
                     </section>
                 </section>
 
 				<section data-background="white">
-					<section class="bg-fade" data-background-image="http://i0.wp.com/co.agencyspotter.com/wp-content/uploads/caseybluefletch.jpg?resize=550%2C366">
+					<section class="bg-fade" data-background-image="images/caseybluefletch.jpg">
                         <h1 class="border-light">Tips/Tricks</h1>
 					</section>
 					<section>
@@ -1779,13 +1864,13 @@ yield, await, async
                             Refactor as you write and notice code nesting
                         </aside>
 					</section>
-					<section data-background-image="http://www.muscleandfitness.com/sites/muscleandfitness.com/files/styles/full_node_image_1090x614/public/karate-snap-wood.jpg?itok=zC6sesVW" data-background-size="cover" data-background-repeat="no-repeat" class="bg-fade">
+					<section data-background-image="images/karate-snap-wood.jpg" data-background-size="cover" data-background-repeat="no-repeat" class="bg-fade">
 						<h2>Aim for vertical</h2>
 						<aside class="notes">
 							Karate chop
                         </aside>
 					</section>
-					<section data-background-image="http://images.sodahead.com/polls/000235551/polls_600px_No_sign.svg_0345_947560_answer_2_xlarge.png" data-background-size="contain">
+					<section data-background-image="images/polls_600px_No_sign.svg_0345_947560_answer_2_xlarge.png" data-background-size="contain">
                         <h2>Avoid Diagonal</h2>
 					</section>
 					<section>
@@ -1795,28 +1880,34 @@ yield, await, async
                         <h2>De-register when Views Disappear</h2>
                         <aside class="notes">
                             If you reference views/elements that might be gone when your callback runs, you may end up killing your app.  This is true of almost every async pattern and is something you need to think about.
-
+                            <br/>
                             Backbone handles this for you by inversing the ownership of the model events so that the view holds the registration and will kill them off on destroy.
                         </aside>
                     </section>
-					<section>
+					<section data-background-image="images/clean_code.png" data-background-size="contain"
+                            class="bg-blur">
 						<h2>Write testable functions</h2>
                         <p class="fragment">Then add coordination</p>
 						<aside class="notes">
 							This helps to think in terms of little units, as well as testing
 						</aside>
 					</section>
-					<section data-background-image="http://fishcommunitysolutions.files.wordpress.com/2012/07/wheel.png" data-background-repeat="no-repeat" class="bg-slight-blur">
+					<section data-background-image="images/wheel.png" data-background-repeat="no-repeat" class="bg-slight-blur">
 						<h2>Don't be clever.</h2>
                         <aside class="notes">
                             Use patterns when you need them!!!
-
+                            <br/>
                             Use libraries that exist - you'll end up breaking something
-
+                            <br/>
                             If you invent something, you will probably be the only one that understands it.
                         </aside>
 					</section>
 				</section>
+                <section>
+                    <h2>Questions</h2>
+                    <br/><br/>
+                    <footer><a href="https://github.com/blakebyrnes/async-programming-presentation">https://github.com/blakebyrnes/async-programming-presentation</a></footer>
+                </section>
 			</div>
 		</div>
 
