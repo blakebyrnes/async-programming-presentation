@@ -112,7 +112,8 @@
 					</q>
 				</section>
 
-                <section class="dark" data-background-image="images/1d5741309ea65303b436ce736f0acca10c88b06552b42184650cb8b4119e036b.jpg">
+                <section class="dark" data-background="white center" data-background-image="images/1d5741309ea65303b436ce736f0acca10c88b06552b42184650cb8b4119e036b.jpg" data-background-size="contain"
+                         data-background-repeat="no-repeat">
                     <h2 class="shadow">Why are you here?</h2>
                     <aside class="notes">
                         Poll group - why are you here
@@ -143,7 +144,7 @@
                              Shifts going on in industry.  Building more API-based back-ends, rich front-ends with multiple clients
                          </aside>
 					</section>
-                    <section class="bg-blur" data-background-image="images/rise_of_mobile-1280x880.jpg">
+                    <section class="bg-blur" data-background-image="images/rise_of_mobile-1280x880.jpg" >
                         <h1>Rise of Mobile</h1>
                         <aside class="notes">
                             Poll audience on how many are doing mobile apps, or interested
@@ -207,9 +208,6 @@ $("#button").click(function(e){
 						<h2>You must learn it!</h2>
                         <img src="images/patience-learn-you-must.jpg"/>
 					</section>
-                    <section data-background="black">
-                        <img src="images/You_7900a8_1204562.jpg"/>
-                    </section>
 					<section>
 						<h2>Real Email</h2>
 						<p>"I am working on a appcelerator project for android and I see that the AJAX call  is not synchronous..   And because of this, my function (sic) populating the UI from the AJAX response is failing."</p>
@@ -247,8 +245,11 @@ plugs.populateData();
 					<section>
 						<h2><strong>Don't let this happen to you</strong></h2>
 					</section>
+                    <section data-background="black">
+                        <img src="images/You_7900a8_1204562.jpg"/>
+                    </section>
 					<section class="bg-fade" data-background-image="images/toolbelt.jpg">
-						<h2 class="border-light">Add to your toolbelt</h2>
+						<h2 style="background: rgba(255,255,255,0.7);">Add to your toolbelt</h2>
 					</section>
 				</section>
 				<section>
@@ -264,25 +265,7 @@ plugs.populateData();
 						</aside>
 					</section>
                     <section data-transition="fade-in" data-background-image="images/running-man-05-g.jpg" >
-                     </section>
-					<section>
-						<p>User Interface</p>
-						<!-- show someone about to hit a ui button -->
-						<pre style="font-size:35px"><code data-trim>
-$("#button").click(function(e){
-  console.log("handle async");
-});
-						</code></pre>
-						<aside class="notes">
-							Client side - handle events
-						</aside>
-					</section>
-					<section>
-						<h4>I/O</h4>
-						<p class="fragment">Network (ajax) requests</p>
-						<p class="fragment">Database request</p>
-						<p class="fragment">File reads/writes</p>
-					</section>
+                    </section>
 					<section>
 						<pre class="smaller"><code data-trim>
 console.log(1);
@@ -314,6 +297,31 @@ console.log(3);
 //click: 2
 						</code></pre>
 					</section>
+
+                    <section>
+                        <p>User Interface</p>
+                        <!-- show someone about to hit a ui button -->
+						<pre style="font-size:35px"><code class="javascript">
+  $("#button").click(function(e){
+    console.log("handle async");
+  });
+                        </code></pre>
+                        <aside class="notes">
+                            Client side - handle events
+                        </aside>
+                    </section>
+                    <section>
+                        <p>Network</p>
+                        <!-- show someone about to hit a ui button -->
+						<pre style="font-size:35px"><code class="javascript">
+  $.get('/user/1', function(user){
+    //deal with result
+  });
+                        </code></pre>
+                        <aside class="notes">
+                            Ajax - long running events
+                        </aside>
+                    </section>
 				</section>
 
 				<section>
@@ -331,23 +339,21 @@ console.log(3);
 					</section>
 					<section>
 						<h5>Javascript (aka, the event loop)</h5>
-						<pre><code>
+						<pre><code class="javascript">
   while(queue.waitForMessage()){
     queue.processNextMessage();
   }
-
-</code></pre>
+                        </code></pre>
 						<aside class="notes">
 							In web browsers, messages are added any time an event occurs and there is an event listener attached to it.
 						</aside>
 					</section>
 					<section>
 						<h5>Timers Demystified</h5>
-						<pre><code>
+						<pre><code class="javascript">
   setTimeout(delayedFunction, 100);
-
-</code></pre>
-<br/>
+                        </code></pre>
+                        <br/>
 						<p class="fragment">Just pushes onto the event loop after 100 ms*</p>
 						<p class="fragment"><i>*kind of</i></p>
 						<aside class="notes">
@@ -825,34 +831,6 @@ _makePostAppend: function( params, body, options, next ){
 					</section>
 				</section>
 
-				<section>
-					<h2>Where will I find async?</h2>
-					<section>
-						<h3>Producers</h3>
-						<p class="fragment">User Interface</p>
-						<p class="fragment">Models</p>
-						<p class="fragment">Ajax</p>
-						<p class="fragment">System Changes</p>
-						<aside class="notes">
-							UI - broadcast events<br/>
-							Models - staet changes<br/>
-							Ajax - complete/error<br/>
-							System - wifi, location, battery changes<br/>
-						</aside>
-					</section>
-					<section>
-						<h3>Consumers</h3>
-						<p class="fragment">Views</p>
-						<p class="fragment">Controllers</p>
-						<p class="fragment">Models</p>
-						<aside class="notes">
-							Views - update when state changes<br/>
-							Controllers - direct action on events<br/>
-							Models - change when other models change<br/>
-						</aside>
-					</section>
-				</section>
-
 				<section data-background-image="images/problem-solving.jpg?1323472010" class="bg-blur">
 					<h2>Problems to Solve</h2>
 				</section>
@@ -872,12 +850,6 @@ _makePostAppend: function( params, body, options, next ){
 					</aside>
 				</section>
 
-				<section data-background-image="images/maxresdefault.jpg" class="bg-fade">
-					<h2 class="border-light">Wait for tasks to finish</h2>
-					<aside class="notes">
-						after all ajax downloaded, display view
-					</aside>
-				</section>
 
 				<section data-background-image="images/blockin.jpg" class="bg-slight-blur">
 					<h2 class="shadow-light">Run Task without Blocking UI</h2>
@@ -893,7 +865,7 @@ _makePostAppend: function( params, body, options, next ){
 					<h2>Handling Errors</h2>
 					<aside class="notes">
 						handle errors that crop up in your application<br/>
-						unhandled exceptions, 
+						unhandled exceptions,
 					</aside>
 				</section>
 				<section data-background="white no-repeat contain center" data-background-image="images/workflow.jpeg" class="bg-blur"  >
@@ -1005,6 +977,7 @@ _makePostAppend: function( params, body, options, next ){
                 <section>
                     <section>
                         <h2>javascript - async.js</h2>
+                        <p>node.js style callbacks</p>
                         <pre class="smaller"><code class="javascript" >
 //nodejs style functions
 function(err, data){
@@ -1348,8 +1321,7 @@ public GameFragment extends Fragment {
 				<section data-background="white">
                     <section>
                         <h2>Promises</h2>
-                        <p>Simplified model of async</p>
-                        OPTIONAL: Multi-threaded
+                        <p>Synchronous looking async</p>
 
                         <aside class="notes">
                             NOTE: has a compliant spec
@@ -1408,7 +1380,8 @@ step1(function (value1) {
   .done();
                         </code></pre>
                         <aside class="notes">
-                            Ending a promise chain makes sure that, if an error doesn’t get handled before the end, it will get rethrown and reported.
+                            Ending a promise chain makes sure that,
+                            <br/>if an error doesn’t get handled before the end, it will get rethrown and reported.
                         </aside>
                     </section>
                     <section>
@@ -1428,14 +1401,6 @@ step1(function (value1) {
 
  //return the promise (not the result)
  return deferred.promise;
-                        </code></pre>
-                    </section>
-                    <section>
-                        <h2>Node-ify</h2>
-                        <pre><code class="javascript">
- return Q.nfcall(FS.readFile,
-                 "foo.txt",
-                 "utf-8");
                         </code></pre>
                     </section>
                     <section>
@@ -1474,6 +1439,14 @@ return Q.all([
                         <aside class="notes">
                             Works with runnable, callable, future
                         </aside>
+                    </section>
+                    <section>
+                        <h2>Node-ify</h2>
+                        <pre><code class="javascript">
+ return Q.nfcall(FS.readFile,
+    "foo.txt",
+    "utf-8");
+                        </code></pre>
                     </section>
                     <section>
                         <h1>Android</h1>
@@ -1851,8 +1824,9 @@ yield, await, async
                 </section>
 
 				<section data-background="white">
-					<section class="bg-fade" data-background-image="images/caseybluefletch.jpg">
-                        <h1 class="border-light">Tips/Tricks</h1>
+					<section class="bg-big-fade" data-background-image="images/caseybluefletch.jpg">
+                        <h1 class="border-light">Tips to "Retrieve"</h1>
+                        <p>when you get stuck</p>
 					</section>
 					<section>
 						<h2>2 deep!</h2>
@@ -1888,21 +1862,34 @@ yield, await, async
 							This helps to think in terms of little units, as well as testing
 						</aside>
 					</section>
-					<section data-background-image="images/wheel.png" data-background-repeat="no-repeat" class="bg-slight-blur">
-						<h2>Don't be clever.</h2>
+                    <section class="dark" data-background-image="images/Hammer-and-Screw.jpg" data-background-repeat="no-repeat" class="bg-fade">
+                        <h2 style="margin-top:350px;">Hammers are not screwdrivers</h2>
                         <aside class="notes">
                             Use patterns when you need them!!!
-                            <br/>
+                        </aside>
+                    </section>
+					<section data-background-image="images/wheel.png" data-background-repeat="no-repeat" class="bg-slight-blur">
+						<h2>Don't reinvent the wheel.</h2>
+                        <aside class="notes">
                             Use libraries that exist - you'll end up breaking something
                             <br/>
                             If you invent something, you will probably be the only one that understands it.
                         </aside>
 					</section>
 				</section>
+                <section class="dark" data-background-image="images/neurons-firing-in-the-brain.jpg">
+                    <h2>Burn it in</h2>
+                </section>
                 <section>
                     <h2>Questions</h2>
-                    <br/><br/>
-                    <footer><a href="https://github.com/blakebyrnes/async-programming-presentation">https://github.com/blakebyrnes/async-programming-presentation</a></footer>
+                    <br/>
+                    <p><a href="https://github.com/blakebyrnes/async-programming-presentation">https://github.com/blakebyrnes/async-programming-presentation</a></p>
+                    <br/>
+                    <dl style="font-size:30px;">
+                      <dt><em>extroverts:</em></dt><dd>raise hands</dd>
+                      <dt><em>introverts:</em></dt><dd><a href="mailto:blake.byrnes@bluefletch.com">blake.byrnes@bluefletch.com</a></dd>
+                      <dt><em>marketers:</em></dt><dd><span style="text-decoration: line-through;color:red">@blakebyrnes</span>  <strong>@prpatel</strong></dd>
+                    </dl>
                 </section>
 			</div>
 		</div>
