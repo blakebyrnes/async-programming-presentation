@@ -97,9 +97,7 @@
 						<small>Created by <a href="http://bluefletch.com">Blake Byrnes</a> / <a href="http://twitter.com/blakebyrnes">@blakebyrnes</a></small>
 					</p>
                     <aside class="notes">
-                        <br/>Basics
-                        <br/>Pitfalls
-                        <br/>Patterns
+                        Briefly - what will this be about?
                     </aside>
 				</section>
 
@@ -113,19 +111,6 @@
 						I work with: <em>iOS, Android, nodejs, html5/ionic/cordova, AWS and sometimes .NET, backend Java</em>
 					</q>
 				</section>
-
-                <section>
-                    <h2>Agenda</h2>
-                    <ul>
-                        <li>Why async</li>
-                        <li>What it is</li>
-                        <li>What can go wrong</li>
-                        <li>Where async is used</li>
-                        <li>Patterns</li>
-                        <li>Tips and Tricks</li>
-                        <li>Questions</li>
-                    </ul>
-                </section>
 
                 <section class="dark" data-background-image="images/1d5741309ea65303b436ce736f0acca10c88b06552b42184650cb8b4119e036b.jpg">
                     <h2 class="shadow">Why are you here?</h2>
@@ -156,7 +141,6 @@
                          <h2>Why I think we're here</h2>
                          <aside class="notes">
                              Shifts going on in industry.  Building more API-based back-ends, rich front-ends with multiple clients
-
                          </aside>
 					</section>
                     <section class="bg-blur" data-background-image="images/rise_of_mobile-1280x880.jpg">
@@ -1012,27 +996,10 @@ _makePostAppend: function( params, body, options, next ){
 						</aside>
 					</section>
 				</section>
-				<section>
-					<h2>Callback Libraries</h2>
-					<section data-background-image="images/154558-004-DB68FE47.jpg" class="bg-blur">
-						<p>Add coordination across callbacks</p>
-					</section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-						<h5>Positives</h5>
-						<p>Consistent structure for calls</p>
-					</section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-						<h5>Negatives</h5>
-						<p>Third Party Library</p>
-					</section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-						<h5>Negatives</h5>
-						<p>Enforced Opinion</p>
-					</section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-						<h5>Negatives</h5>
-						<p>Still inherit some problems of callbacks</p>
-					</section>
+
+                <section data-background-image="images/154558-004-DB68FE47.jpg" class="bg-blur">
+                    <h2>Callback Libraries</h2>
+                    <p>Add coordination across callbacks</p>
                 </section>
 
                 <section>
@@ -1157,6 +1124,30 @@ findAsync(query).continueWithTask(new Continuation&lt;List&lt;ParseObject>, Task
                     </aside>
                 </section>
 
+                <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                    <h5>Positives</h5>
+                    <p>Consistent structure for calls</p>
+                </section>
+                <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
+                    <h5>Negatives</h5>
+                    <p>Third Party Library</p>
+                </section>
+                <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
+                    <h5>Negatives</h5>
+                    <p>Enforced Opinion</p>
+                </section>
+                <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
+                    <h5>Negatives</h5>
+                    <p>Still inherit some problems of callbacks</p>
+                </section>
+                <section>
+                    <h5>When to use</h5>
+                    <p class="fragment">>=2 nesting</p>
+                    <p class="fragment">Personal preference</p>
+                    <aside class="notes">
+                        Personal preference
+                    </aside>
+                </section>
 				<section data-background="white">
 					<section data-background-image="images/puppet-master.png" class="bg-slight-blur">
                         <h2>Delegation Pattern</h2>
@@ -1321,7 +1312,7 @@ public GameFragment extends Fragment {
                             Not just willy-nilly listening to events.  Most of the time this is great, but sometimes you need to know a "new object" got created.
                         </aside>
                     </section>
-                    <section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
                         <h5>Positives</h5>
                         <p>One or Many Subscribers</p>
                     </section>
@@ -1357,16 +1348,13 @@ public GameFragment extends Fragment {
 				<section data-background="white">
                     <section>
                         <h2>Promises</h2>
-                    </section>
-                    <section>
                         <p>Simplified model of async</p>
+                        OPTIONAL: Multi-threaded
+
                         <aside class="notes">
                             NOTE: has a compliant spec
                             Go into "what it is"
                         </aside>
-                    </section>
-                    <section>
-                        <p>OPTIONAL: Multi-threaded</p>
                     </section>
                     <section data-background="center" data-background-image="images/wonka.jpg" data-background-repeat="no-repeat" data-background-size="contain">
                     </section>
@@ -1383,7 +1371,8 @@ public GameFragment extends Fragment {
                     </section>
                     <section data-background-image="images/6929697914_0fd3bd4457_b.jpg" data-background-size="contain">
                         <aside class="notes">
-                            Immutable
+                            Immutable once resolved <br/>
+                            this means you can reuse a resolved promise and get the result
                         </aside>
                     </section>
                     <section>
@@ -1947,6 +1936,7 @@ yield, await, async
             Reveal.configure({
                 keyboard: {
                     13: 'next', // go to the next slide when the ENTER key is pressed
+                    37 : 'prev',
                     39 : 'next'
                 }
             });
