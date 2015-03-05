@@ -117,8 +117,8 @@
                 <section>
                     <h2>Agenda</h2>
                     <ul>
-                        <li>Why present on async</li>
-                        <li>What is it</li>
+                        <li>Why async</li>
+                        <li>What it is</li>
                         <li>What can go wrong</li>
                         <li>Where async is used</li>
                         <li>Patterns</li>
@@ -131,6 +131,10 @@
                     <h2 class="shadow">Why are you here?</h2>
                     <aside class="notes">
                         Poll group - why are you here
+                        <br/>- Learning new skills?
+                        <br/>- Had issues with async
+                        <br/>- Best presentation available
+                        <br/>- Presenter seemed a little off kilter from the intro
                     </aside>
                 </section>
 
@@ -139,6 +143,10 @@
                     <aside class="notes">
                         All know skills are important, what are yours?
                         <br/>Poll group - language skills
+                        <br/>-Java
+                        <br/>-Javascript
+                        <br/>.Net
+                        <br/>Other
                     </aside>
                 </section>
 
@@ -155,7 +163,7 @@
                         <h1>Rise of Mobile</h1>
                         <aside class="notes">
                             Poll audience on how many are doing mobile apps, or interested
-                            <br/><br/>
+                            <br/>
                             Inherently asynchronous env (threading no longer your concern like backend)
                         </aside>
                     </section>
@@ -255,8 +263,8 @@ plugs.populateData();
 					<section>
 						<h2><strong>Don't let this happen to you</strong></h2>
 					</section>
-					<section data-background-image="images/toolbelt.jpg">
-						<h2 class="shadow-light">Add to your toolbelt</h2>
+					<section class="bg-fade" data-background-image="images/toolbelt.jpg">
+						<h2 class="border-light">Add to your toolbelt</h2>
 					</section>
 				</section>
 				<section>
@@ -356,7 +364,7 @@ console.log(3);
 
 </code></pre>
 <br/>
-						<p class="fragment">Just pops onto the event loop after 100 ms*</p>
+						<p class="fragment">Just pushes onto the event loop after 100 ms*</p>
 						<p class="fragment"><i>*kind of</i></p>
 						<aside class="notes">
 							Calling setTimeout will add a message to the queue after the time passed as second argument. 
@@ -868,8 +876,7 @@ _makePostAppend: function( params, body, options, next ){
 				<section data-background-image="images/49824-stages-of-rocket-launching-illustration.jpeg" class="bg-fade">
 					<h2>Long Tasks One After Another</h2>
 
-                    <img class="fragment" width="400px" height="300px" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS2hBhG_Y9prT3SyUfOf0atlzx9U2gc90L3Q8dTirJ7F8w9tB8_wsLNg7k"/>
-					<aside class="notes">
+                    <aside class="notes">
 						think ajax, file uploads
 					</aside>
 				</section>
