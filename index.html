@@ -38,6 +38,11 @@
                 from { -webkit-filter: opacity(100%); }
                 to { -webkit-filter: opacity(20%); }
             }
+
+            @-webkit-keyframes fade-out {
+                from { -webkit-filter: opacity(100%); }
+                to { -webkit-filter: opacity(5%); }
+            }
             @-webkit-keyframes opac-anim-60 {
                 from { -webkit-filter: opacity(100%); }
                 to { -webkit-filter: opacity(60%); }
@@ -57,11 +62,18 @@
             .backgrounds .bg-fade {
                 -webkit-filter: blur(1px) opacity(60%);
             }
+            .backgrounds .bg-slight-fade {
+                -webkit-filter: blur(1px) opacity(80%);
+            }
             .backgrounds .bg-big-fade {
                 -webkit-filter: blur(1px) opacity(20%);
             }
             !h2 ~ section.hide-title.present,section.hide-title.hide-title.present + h1 {
                 display: none !important;
+            }
+
+            .present .fade-on-display {
+                -webkit-animation: fade-out 4s forwards  ease-in-out;
             }
             h2.shadow,h3.shadow {
                 text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
@@ -77,6 +89,16 @@
             }
             p {
                 font-size: 1.4em !important;
+            }
+            div.shaded {
+                background:rgba(255,255,255,0.9);
+                padding:10px;
+            }
+            .shaded {
+                background:rgba(255,255,255,0.9);
+            }
+            .shaded-8 {
+                background:rgba(255,255,255,0.8);
             }
         </style>
         <!--[if lt IE 9]>
@@ -180,6 +202,7 @@ $("#button").click(function(e){
                             Client side - handle events
                         </aside>
                     </section>
+                    
                     <section data-background-image="images/EasyButton.jpg">
                         <aside class="notes">
                             Some of you are saying, I went to the wrong class. Shit
@@ -210,7 +233,7 @@ $("#button").click(function(e){
 					</section>
 					<section>
 						<h2>Real Email</h2>
-						<p>"I am working on a appcelerator project for android and I see that the AJAX call  is not synchronous..   And because of this, my function (sic) populating the UI from the AJAX response is failing."</p>
+						<p>"I am working on a Appcelerator project for android and I see that the AJAX call  is not synchronous..   And because of this, my function (sic) populating the UI from the AJAX response is failing."</p>
                         <aside class="notes">
                             Is this familiar for anyone?
                         </aside>
@@ -249,13 +272,13 @@ plugs.populateData();
                         <img src="images/You_7900a8_1204562.jpg"/>
                     </section>
 					<section class="bg-fade" data-background-image="images/toolbelt.jpg">
-						<h2 style="background: rgba(255,255,255,0.7);">Add to your toolbelt</h2>
+						<h2 class="shaded-8">Add to your toolbelt</h2>
 					</section>
 				</section>
 				<section>
-					<h2>What is async?</h2>
 					<section data-background-image="images/running-man-05-g.jpg" class="bg-blur">
-						<h4>Code that doesn't wait!</h4>
+                        <h2>What is async?</h2>
+                        <h4>Code that doesn't wait!</h4>
 						<p style="font-size: 1.5em">Will execute later</p>
                         <!-- running man picture -->
 						<aside class="notes">
@@ -264,10 +287,9 @@ plugs.populateData();
 							Important to talk about how it doesn't block.  Implication is that it can get more out of the CPU where the code is running
 						</aside>
 					</section>
-                    <section data-transition="fade-in" data-background-image="images/running-man-05-g.jpg" >
-                    </section>
 					<section>
-						<pre class="smaller"><code data-trim>
+                        <h2>1, 2, 3</h2>
+					    <pre class="smaller"><code data-trim>
 console.log(1);
 
 $("#button").click();
@@ -283,7 +305,8 @@ console.log(3);
 						</code></pre>
 					</section>
 					<section>
-						<pre><code data-trim>
+                        <h2>Becomes 1, 3, 2</h2>
+					    <pre><code data-trim>
 console.log(1);
 
 $("#button").click(function(e){
@@ -297,8 +320,62 @@ console.log(3);
 //click: 2
 						</code></pre>
 					</section>
-
                     <section>
+						<p>Don't be Greedy</p>
+						<pre class=""><code class="javascript">
+while (forever == true) {
+ runSlowThingsLikeABoss();
+}
+
+manThisAppSucks();
+                        </code></pre>
+						<aside class="notes">
+                            Brings me to my next point.<br/>
+                            Async built around not "blocking" so that the UI can refresh.
+						</aside>
+
+                    </section>
+                    <section>
+						<p>Share the CPU</p>
+						<pre class=""><code class="java">
+while (userHasntClicked) {
+  //keep going
+}
+
+//finally run.  Android is so slow...
+clickHandler();
+                        </code></pre>
+						<aside class="notes">
+                            If we built apps this way, they wouldn't work very well
+						</aside>
+
+                    </section>
+                    <section data-background-image="images/BTm1H.png" data-background="rgba(51,51,44, 255) center" data-background-size="contain"
+                             data-background-repeat="no-repeat">
+                        <aside class="notes">
+                            In Javascript, you have one thread, so you need to take advantage of it's evented architecture.<br/>
+                            JS is really good at queuing things up to run when events signal that they're ready
+                        </aside>
+                    </section>
+                    <section class=" bg-fade" data-background="images/branches.png">
+                        <h3 class="shaded-8" >async === Multi-Threading?</h3>
+
+                        <aside class="notes">
+                            - Async CAN be multithreaded, but doesn't need to be.
+                            <br/>
+                            - Probably will be in mobile, but depends on if it needs CPU
+
+                            <a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-difference">stack overflow</a>
+                        </aside>
+                    </section>
+                    <section data-background="white center" data-background-image="images/mobiledevices.jpg" data-background-size="contain" data-background-repeat="no-repeat">
+                        <aside class="notes">
+                            Run loop draws (16ms to complete it's loop and still feel fast)<br/>
+                            Gotta run things in bg so they don't block
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>ERGO</h2>
                         <p>User Interface</p>
                         <!-- show someone about to hit a ui button -->
 						<pre style="font-size:35px"><code class="javascript">
@@ -311,6 +388,7 @@ console.log(3);
                         </aside>
                     </section>
                     <section>
+                        <h2>Q.E.D.</h2>
                         <p>Network</p>
                         <!-- show someone about to hit a ui button -->
 						<pre style="font-size:35px"><code class="javascript">
@@ -325,60 +403,6 @@ console.log(3);
 				</section>
 
 				<section>
-					<section data-background-image="images/running_man.png" class="dark">
-
-                        <h2>The run loop</h2>
-						<aside class="notes">
-							Back to the running man.  He's going to keep running, until he runs into obstacles.
-                            <br/>
-                            Viewers are prompted once something is about to happen.  "Wait for execute"
-						</aside>
-					</section>
-					<section data-background-image="images/BTm1H.png" data-background="rgba(51,51,44, 255) center" data-background-size="contain"
-                            data-background-repeat="no-repeat">
-					</section>
-					<section>
-						<h5>Javascript (aka, the event loop)</h5>
-						<pre><code class="javascript">
-  while(queue.waitForMessage()){
-    queue.processNextMessage();
-  }
-                        </code></pre>
-						<aside class="notes">
-							In web browsers, messages are added any time an event occurs and there is an event listener attached to it.
-						</aside>
-					</section>
-					<section>
-						<h5>Timers Demystified</h5>
-						<pre><code class="javascript">
-  setTimeout(delayedFunction, 100);
-                        </code></pre>
-                        <br/>
-						<p class="fragment">Just pushes onto the event loop after 100 ms*</p>
-						<p class="fragment"><i>*kind of</i></p>
-						<aside class="notes">
-							Calling setTimeout will add a message to the queue after the time passed as second argument. 
-						</aside>
-					</section>
-				</section>
-				<section>
-					<section class="dark bg-fade" data-background="images/branches.png">
-						<h3 class="shadow"><strong>Asynchronous === Multi-Threading?</strong></h3>
-
-						<aside class="notes">
-                            - Async not <i>necessarily</i> multi-threaded
-                            <br/>
-                            - Multi-threading === run heavy process in background
-                            <br/>
-                            - Language dependent
-                            <br/>
-                            - If op doesn't require CPU, that operation can be done without spawning another thread (i/o, hardware notification)
-
-							<a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-difference">stack overflow</a>
-						</aside>
-					</section>
-				</section>
-				<section>
 					<h1>Ok, got it</h1>
 					<h3>Is there anything more?</h3>
 				</section>
@@ -386,6 +410,7 @@ console.log(3);
 
 				<section  data-background-color="black" >
 					<h2 style="color:#fff">Why is it hard?</h2>
+
                     <section data-background-image="">
 
                     </section>
@@ -424,41 +449,11 @@ console.log(3);
 				</section>
 
 				<section>
-					<h2>What can go wrong?</h2>
+					<h2>How does it go wrong?</h2>
 				</section>
 
 				<section data-background="black">
 					<img src="images/Heaven-or-Hell-Arrow-Way-Line-Route.jpg"/>
-				</section>
-				<section>
-					<h3>Add 5 new features</h3>
-					<pre class="smallest stretch" ><code>
-fs.readdir(source, function(err, files) {
-  if (err) {
-    console.log('Error finding files: ' + err);
-  } else {
-    files.forEach(function(filename, fileIndex) {
-      console.log(filename);
-      gm(source + filename).size(function(err, values) {
-        if (err) {
-          console.log('Error identifying file size: ' + err)
-        } else {
-          console.log(filename + ' : ' + values);
-          aspect = (values.width / values.height);
-          widths.forEach(function(width, widthIndex) {
-            height = Math.round(width / aspect);
-            console.log('resizing ' + filename + 'to ' + height + 'x' + height);
-            var fn = destination + 'w' + width + '_' + filename;
-            this.resize(width, height).write(fn, function(err) {
-              if (err) console.log('Error writing file: ' + err);
-            });
-          }.bind(this));
-        }
-      });
-    });
-  }
-});
-                    </code></pre>
 				</section>
 				<section>
 					<h3>Example - can't change backend</h3>
@@ -831,56 +826,6 @@ _makePostAppend: function( params, body, options, next ){
 					</section>
 				</section>
 
-				<section data-background-image="images/problem-solving.jpg?1323472010" class="bg-blur">
-					<h2>Problems to Solve</h2>
-				</section>
-
-				<section data-background-image="images/49824-stages-of-rocket-launching-illustration.jpeg" class="bg-fade">
-					<h2>Long Tasks One After Another</h2>
-
-                    <aside class="notes">
-						think ajax, file uploads
-					</aside>
-				</section>
-
-				<section data-background-image="images/36542230.jpg" class="bg-blur">
-					<h2>Long Tasks at once</h2>
-					<aside class="notes">
-						think ajax, file uploads
-					</aside>
-				</section>
-
-
-				<section data-background-image="images/blockin.jpg" class="bg-slight-blur">
-					<h2 class="shadow-light">Run Task without Blocking UI</h2>
-					<aside class="notes">
-						facebook detects dom changes in background (ie, react)
-					</aside>
-				</section>
-                <section data-background-image="images/ui-block.jpg" data-background="black center" data-background-repeat="no-repeat"
-                         data-background-size="contain">
-
-                </section>
-                <section data-background-image="images/54402087.jpg" class="bg-blur">
-					<h2>Handling Errors</h2>
-					<aside class="notes">
-						handle errors that crop up in your application<br/>
-						unhandled exceptions,
-					</aside>
-				</section>
-				<section data-background="white no-repeat contain center" data-background-image="images/workflow.jpeg" class="bg-blur"  >
-					<h2>Dynamic or Complicated Workflows</h2>
-					<aside class="notes">
-						Complicated sequence of activities that have lots of branching and flows might need an event system
-					</aside>
-				</section>
-				<section data-background="black no-repeat contain center" data-background-image="images/battery.png" class="dark bg-fade">
-					<h2 class="shadow">Handling Triggered Events</h2>
-					<aside class="notes">
-						System events, UI events, etc.  Handle changes and react to them
-					</aside>
-				</section>
-
                 <section data-background-image="images/Problems-solving.jpg"
                         data-background-size="contain" data-background="black center" data-background-repeat="no-repeat">
 
@@ -891,11 +836,12 @@ _makePostAppend: function( params, body, options, next ){
 				</section>
 
 				<section data-background="white">
-					<h2>Callbacks</h2>
 					<section data-background-image="images/keep-calm-and-call-me-later-1.png" data-background-size="contain" data-background="black center" data-background-repeat="no-repeat" class="bg-big-fade">
-
-					</section>
+                        <h2>Callbacks</h2>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    </section>
 					<section>
+                        <h2>Javascript</h2>
 						<pre class="smaller"><code>
   readABigFile('filename.jpg', 
     function afterRead(error, file){
@@ -904,6 +850,7 @@ _makePostAppend: function( params, body, options, next ){
 						</code></pre>
 					</section>
 					<section>
+                        <h2>Java</h2>
 						<pre class="smaller"><code style="font-size:24px">
   readABigFile(new OnFileReadListener(){
      @Override
@@ -918,6 +865,7 @@ _makePostAppend: function( params, body, options, next ){
 						</code></pre>
 					</section>
                     <section>
+                        <h2>Java 8!</h2>
 						<pre class="smaller"><code style="font-size:24px">
   readABigFile(file -> {
     Log.d(TAG, "Read file " + file);
@@ -935,38 +883,51 @@ _makePostAppend: function( params, body, options, next ){
 
                     </section>
 
+
+                    <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
+                        <h3>When to use</h3>
+                        <p>When your result will happen asynchronously :)</p>
+                        <p>Simple use cases (most)</p>
+                        <aside class="notes">
+                            A lot of code doesn't need some higher level abstraction.  Don't go down a path of libraries and patterns if you don't need them.
+                        </aside>
+                    </section>
+
                     <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5 class="positives">Positives</h5>
+                        <h3 class="positives">What's not to like?</h3>
                         <p>Built-in</p>
+                        <p>Easy to Read</p>
 						<aside class="notes">
 							No 3rd party necessary
 						</aside>
 					</section>
-					<section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-						<h5>Positives</h5>
-						<p>Easy to Read</p>
-					</section>
-					<section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-						<h5>Negatives</h5>
-						<p>Multiple calls quickly devolve</p>
-						<aside class="notes">
-							Nested calls
-						</aside>
-					</section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-						<h5>Negatives</h5>
-						<p>Can Stall</p>
-						<aside class="notes">
-							If you return and forget to call the callback, the code won't ever continue.  This is a fundamental difference from sequential programs.
-						</aside>
-					</section>
-					<section>
-						<h5>When to use</h5>
-						<p>Simple use cases (most)</p>
-						<aside class="notes">
-							A lot of code doesn't need some higher level abstraction.  Don't go down a path of libraries and patterns if you don't need them.
-						</aside>
-					</section>
+
+                    <section data-background-image="images/danger.jpg" data-background-size="contain" data-background="white center" data-background-repeat="no-repeat">
+                    </section>
+                    <section class="bg-big-fade" data-background-size="contain" data-background="white center" data-background-repeat="no-repeat"
+                               data-background-image="images/sotp.jpg">
+                        <h3 class="shaded-8" >Might be doing it wrong if:</h3>
+                        <ul style="font-size:1.5em" >
+                            <li class="fragment">You read the code synchronously</li>
+                            <li class="fragment">Create callbacks in callbacks</li>
+                            <li class="fragment">Forget to call back</li>
+                        </ul>
+                        <aside class="notes">
+                            If you return and forget to call the callback, the code won't ever continue.  This is a fundamental difference from sequential programs.
+                        </aside>
+                    </section>
+
+                    <section   style="background: rgba(255,255,255,0.8)" class="bg-fade" data-background-size="contain"
+                               data-background="white center" data-background-repeat="no-repeat"
+                               data-background-image="images/wunda-weeder-garden-pants-solar.jpg">
+                        <h3>Might be over-thinking it if:</h3>
+                        <ul style="font-size:1.5em" >
+                            <li  class="fragment">Always using higher abstractions</li>
+                        </ul>
+                        <aside class="notes">
+                            If you return and forget to call the callback, the code won't ever continue.  This is a fundamental difference from sequential programs.
+                        </aside>
+                    </section>
 				</section>
 
                 <section data-background-image="images/154558-004-DB68FE47.jpg" class="bg-blur">
@@ -1097,30 +1058,62 @@ findAsync(query).continueWithTask(new Continuation&lt;List&lt;ParseObject>, Task
                     </aside>
                 </section>
 
-                <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                    <h5>Positives</h5>
-                    <p>Consistent structure for calls</p>
-                </section>
-                <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                    <h5>Negatives</h5>
-                    <p>Third Party Library</p>
-                </section>
-                <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                    <h5>Negatives</h5>
-                    <p>Enforced Opinion</p>
-                </section>
-                <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                    <h5>Negatives</h5>
-                    <p>Still inherit some problems of callbacks</p>
-                </section>
-                <section>
-                    <h5>When to use</h5>
-                    <p class="fragment">>=2 nesting</p>
-                    <p class="fragment">Personal preference</p>
+
+
+                <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
+                    <h3>When to use</h3>
+                    <p class="fragment">Find nests in nests</p>
+                    <p class="fragment">Prefer over Promises, Rx</p>
                     <aside class="notes">
                         Personal preference
                     </aside>
                 </section>
+
+                <section data-background="white center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                    <h3 class="positives">What's not to like?</h3>
+                    <p>Consistent structure</p>
+                    <p>Clean solution</p>
+                    <aside class="notes">
+                        Follows the pattern of the nodejs callbacks
+                        Callback coordination is complex.  These are pretty clean ways to handle things
+                    </aside>
+                </section>
+
+                <section data-background-image="images/Quicksand-warning.jpg"  data-background="white center" data-background-size="contain" data-background-repeat="no-repeat"  >
+                </section>
+                <section  data-background="white center" data-background-size="contain" data-background-repeat="no-repeat"  data-background-image="images/reply-all-email-fail.jpg">
+                    <h2 class="shaded">Rookie mistakes:</h2>
+                    <div class="fragment shaded">
+                    <ul style="font-size:1.5em" >
+                        <li>Still forget to call back</li>
+                        <li class="fragment">Send data to error param (nodejs)</li>
+                        <li class="fragment">Not try/catch errors</li>
+                    </ul>
+                    </div>
+                    <aside class="notes">
+                        If you return and forget to call the callback, the code won't ever continue.
+                        <br/>This is a fundamental difference from sequential programs.
+
+                        <p>Still inherit some problems of callbacks</p>
+                    </aside>
+                </section>
+
+                <section data-background-size="contain" data-background="white center" data-background-repeat="no-repeat"
+                         data-background-image="images/vista.jpg">
+                    <h2 class="shaded">You might be "over-engineering" it:</h2>
+                    <div class="fragment shaded">
+                        <ul style="font-size:1.5em" >
+                        <li>Use for single callbacks, synchronous loops</li>
+                        <li class="fragment">Roll your own</li>
+                        <li class="fragment">Parallel inside waterfall</li>
+                    </ul>
+                     </div>
+                    <aside class="notes">
+                        <p>Enforced Opinion - remember that when you design arch</p>
+                        <p>3rd party lib - but better than your own</p>
+                    </aside>
+                </section>
+
 				<section data-background="white">
 					<section data-background-image="images/puppet-master.png" class="bg-slight-blur">
                         <h2>Delegation Pattern</h2>
@@ -1186,35 +1179,55 @@ public GameFragment extends Fragment {
 }
                         </code></pre>
 					</section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-						<h5>Positives</h5>
-						<p>Two-way Control</p>
-                        <aside class="notes">
-                            Not just subscribing - can send data, request data, etc
-                        </aside>
-					</section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-						<h5>Positives</h5>
-						<p>Very Clear API (interface)</p>
-                        <aside class="notes">
-                            Self documenting.  Advantage over some other patterns
-                        </aside>
-					</section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-						<h5>Negatives</h5>
-						<p>Switching Listener</p>
-					</section>
-					<section>
-						<h5>When to use</h5>
-						<p class="fragment">View 1-to-1 with "worker"</p>
-						<p class="fragment">Service "instance"</p>
+
+
+                    <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
+                        <h3>When to use</h3>
+                        <p class="fragment">Presenters/Data Adapters</p>
+                        <p class="fragment">Service "instance"</p>
 
                         <aside class="notes">
                             UI Component - if your component has one "presenter" or driver, it can use a delegate pattern to communciate effectively back and forth<br/>
                             Service Instance - you CAN use this pattern to allow works to subscribe to callbacks when things download/succeed.  See iOS NSURLSession handlers on the original class<br/>
                             Coupling - also applicable if you have a service that is ONLY ever going to be for one view<br/>
                         </aside>
-					</section>
+                    </section>
+
+                    <section data-background="white center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                        <h3 class="positives">What's not to like?</h3>
+
+                        <p>Two-way Control</p>
+                        <p>Very Clear API (interface)</p>
+                        <aside class="notes">
+                            Not just subscribing - can send data, request data, etc
+                            <br/>
+                            Self documenting.  Advantage over some other patterns
+
+                        </aside>
+                    </section>
+
+                    <section data-background-image="images/signs-caution_00389671.jpg">
+                    </section>
+                    <section  data-background="white center" data-background-size="contain" data-background-repeat="no-repeat"
+                              data-background-image="images/steve-urkel-did-i-do-that-676x540.png">
+                        <h2 class="shaded">It happens...</h2>
+                        <br/><br/><br/>
+                        <div class="fragment shaded">
+                            <ul style="font-size:1.5em" >
+                                <li >Too much functionality in one interface</li>
+                                <li class="fragment">Forget to de-register</li>
+                                <li class="fragment">Singleton backend, switching delegate</li>
+                            </ul>
+                        </div>
+                        <aside class="notes">
+                            Don't make someone implement a huge interface if they don't need it
+                            <br/>
+                            Might end up getting callbacks when you don't want them anymore
+                            <br/>
+                            Story about project where we did this (sometimes doesn't get handed off soon enough)
+                        </aside>
+                    </section>
+
 				</section>
 				<section>
                     <section data-background-image="images/Observer.png" class="bg-fade">
@@ -1271,57 +1284,70 @@ public GameFragment extends Fragment {
  }
                         </code></pre>
                     </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Loose Coupling</p>
-                        <aside class="notes">
-                            Publisher doesn't know who is listening
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Specific Object of Interest</p>
-                        <aside class="notes">
-                            Not just willy-nilly listening to events.  Most of the time this is great, but sometimes you need to know a "new object" got created.
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>One or Many Subscribers</p>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Memory Loops</p>
-                        <aside class="notes">
-                            View might disappear, but still registered for events
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Can Only Register to Observe Future</p>
-                        <aside class="notes">
-                            You usually only hear events, so you need to handle synchronously, and then also in your async block
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Often String-based Event Names</p>
-                        <aside class="notes">
-                            Can make intent of the api a little tough to follow.  There's no self-documenting structure in many cases.
-                        </aside>
-                    </section>
-                    <section>
-                        <h5>When to Use</h5>
+                    <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
+                        <h3>When to Use</h3>
                         <p class="fragment">View/Model Changes</p>
                         <p class="fragment">Backbone.js/Frameworks</p>
                         <p class="fragment">DOM</p>
                         <p class="fragment">Lots of other places</p>
                     </section>
+
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                        <h3>What's not to like?</h3>
+                        <p>Loose Coupling</p>
+                        <p>Specific Object of Interest</p>
+                        <p>One or Many Subscribers</p>
+                        <aside class="notes">
+                            Publisher doesn't know who is listening
+                            <br/>
+                            Not just willy-nilly listening to events.  Most of the time this is great, but sometimes you need to know a "new object" got created.
+
+                        </aside>
+                    </section>
+                    <section class="bg-slight-blur" data-background-image="images/eiMd9Le4T.png" data-background="white center">
+                    </section>
+
+                    <section data-background-image="images/SC_BlessYourHeart_popup.jpg" data-background-repeat="no-repeat" data-background-size="contain" data-background="white center">
+                        <h2 class="shaded">Bless your heart</h2>
+                        <div class="shaded fragment">
+                            <p class="">Forgot to de-register</p>
+                            <p class="fragment">Waiting for events that already happened</p>
+                            <p class="fragment">Poorly documented</p>
+                        </div>
+                        <aside class="notes">
+                            View might disappear, but still registered for events
+                            <br/>
+                            Sometimes we forget that events don't have state.  Forces a load then listen pattern (sync, then async)
+                            <br/>
+                            Can make intent of the api a little tough to follow.  There's no self-documenting structure in many cases.
+                        </aside>
+                    </section>
+
+                    <section data-background-image="images/j400_976851.jpg">
+                        <h2 class="shaded">Overkill?</h2>
+                        <div class="shaded fragment">
+                            <p class="">Rolled your own</p>
+                            <p class="fragment">Skipped straight to reactive</p>
+                            <p class="fragment">Obsessed over automatic data-binding</p>
+                            <p class="fragment">Abstracted away from observing actual objects</p>
+                        </div>
+                        <aside class="notes">
+                            Built into many popular frameworks
+                            <br/>
+                            Reactive: don't automatically jump to reactive.  Can be overkill in many situations
+                            <br/>
+                            Data binding: sometimes you want to auto-update state all on it's own and skip manual changes.  That CAN be great, but sometimes hedges towards overkill.  Just beware of your line.
+                            <br/>
+                            Abstract: bleed towards message bus
+                        </aside>
+                    </section>
 				</section>
 				<section data-background="white">
-                    <section>
-                        <h2>Promises</h2>
-                        <p>Synchronous looking async</p>
+                    <section data-background-size="contain" data-background="white center"
+                             data-background-image="images/336419_10151003106623944_1796915251_o.jpg"
+                             data-background-repeat="no-repeat">
+                        <h2 class="shaded">Promises</h2>
+                        <p class="shaded">Synchronous looking async</p>
 
                         <aside class="notes">
                             NOTE: has a compliant spec
@@ -1330,22 +1356,19 @@ public GameFragment extends Fragment {
                     </section>
                     <section data-background="center" data-background-image="images/wonka.jpg" data-background-repeat="no-repeat" data-background-size="contain">
                     </section>
-                    <section data-background="center" data-background-image="images/wonka.jpg" class="bg-fade" data-background-repeat="no-repeat" data-background-size="contain">
-                        <p class="border-light ">Object that will <i>always</i> either resolve or reject</p>
-                    </section>
-                    <section>
-                        <p>A promise must be in one of three states:</p>
-                        <ul style="font-size:1.4em">
-                            <li>pending</li>
-                            <li>fulfilled</li>
-                            <li>rejected</li>
-                        </ul>
+                    <section data-background="white center" data-background-image="images/wonka.jpg" class="bg-fade" data-background-repeat="no-repeat" data-background-size="contain">
+                        <p class="shaded" data-fragment-index="0">Object <span style="font-size: 0.7em">that will</span></p>
+                        <p class="shaded fragment" data-fragment-index="1"><i style="font-size: 1.3em">always</i> either <b style="color: green">resolve</b> or <b style="color: red">reject</b></p>
                     </section>
                     <section data-background-image="images/6929697914_0fd3bd4457_b.jpg" data-background-size="contain">
                         <aside class="notes">
                             Immutable once resolved <br/>
                             this means you can reuse a resolved promise and get the result
                         </aside>
+                    </section>
+
+                    <section data-background-image="images/Indiana-Jones-and-the-Temple-of-Doom-Mola-Ram-Amrish-Puri-heart.png" data-background-size="contain">
+
                     </section>
                     <section>
                         <h2>Pyramid of Doom</h2>
@@ -1360,9 +1383,6 @@ step1(function (value1) {
   });
 });
                         </code></pre>
-                    </section>
-                    <section data-background-image="images/Indiana-Jones-and-the-Temple-of-Doom-Mola-Ram-Amrish-Puri-heart.png" data-background-size="contain">
-
                     </section>
                     <section>
                         <h2>Q - javascript</h2>
@@ -1441,12 +1461,26 @@ return Q.all([
                         </aside>
                     </section>
                     <section>
-                        <h2>Node-ify</h2>
+                        <h2>Easy to integrate</h2>
                         <pre><code class="javascript">
  return Q.nfcall(FS.readFile,
     "foo.txt",
     "utf-8");
                         </code></pre>
+                        <pre><code class="javascript">
+ return Q(jQuery.ajax({
+    url: "foobar.html",
+    type: "GET"
+ })).then(function (data) {
+    // on success
+ }, function (xhr) {
+    // on failure
+ });
+                        </code></pre>
+                        <aside class="notes">
+                            jQuery deferred follows a non standard spec for promises<br/>
+                            includes things like - promises can change, callbacks aren't guaranteed to be async, etc
+                        </aside>
                     </section>
                     <section>
                         <h1>Android</h1>
@@ -1536,80 +1570,80 @@ return blogDAO.loadFromDB(blogId)
 
                         </code></pre>
                     </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Mimics Synchronous Code</p>
-                        <aside class="notes">
-                            Looks like synchronous code
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Error Handling</p>
-                        <aside class="notes">
-                            Easily bubble up typed errors, catch uncaught exceptions.
-                            <br/><br/>
-                            One gotcha - syntax can take a second error handler.  You should still have a good strategy for sending up typed errors or handling them as they occur.  Treat it like Try/Catch rules.
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>All Paths Exit</p>
-                        <aside class="notes">
-                            You can't screw up and get stuck.  It will always go to the next block
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Resolve Immediately</p>
-                        <aside class="notes">
-                            Return state immediately and still go to the callbacks
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>External Library</p>
-                        <aside class="notes">
-                            Libs implement different versions of what it means to have "Promises". Luckily, most things are converting to follow the Promises/A standard.
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Can Discourage Testing "Units"</p>
-                        <aside class="notes">
-                            In practice, it feels a little common to put your code in a promise block and deal with it right there.  This isn't a science, just an observed behavior.
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Hard to De-register</p>
-                        <aside class="notes">
-                            In some of the libraries, it can be hard to cancel the promises if your view goes out of scope.
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Hard to Construct Promises Initially</p>
-                        <aside class="notes">
-                            For some reason, the behavior of promises can be a little confusing to write for yourself initially
-                        </aside>
-                    </section>
-                    <section>
-                        <h5>When to Use</h5>
+                    <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
+                        <h3>When to Use</h3>
+                        <p class="fragment">Coordinated Async Calls (parallel/sequence)</p>
                         <p class="fragment">Backend Ajax -> DB Storage</p>
-                        <p class="fragment">Coordinated Async Calls </p>
-                        <p class="fragment">When It's Available</p>
+                        <p class="fragment">Where already available</p>
                         <aside class="notes">
                             JS - Built into es6<br/>
                             JS - Built into Chrome 32, Opera 19 & Firefox 29 (small polyfill exists)<br/>
                             Android - when you can use retrolamda and RxJava is too much for you<br/>
                         </aside>
                     </section>
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                        <h3>What's not to like?</h3>
+                        <p>Mimics Synchronous Code</p>
+                        <p>Great Error Handling</p>
+                        <p>All Paths Exit</p>
+                        <p>Can Resolve Immediately or Async</p>
+                        <aside class="notes">
+                            Looks sync: Looks like synchronous code
+                            <br/>
+                            Errors: Easily bubble up typed errors, catch uncaught exceptions.
+                            <br/> --> One gotcha - syntax can take a second error handler.  You should still have a good strategy for sending up typed errors or handling them as they occur.  Treat it like Try/Catch rules.
+                            <br/>
+                            All Paths Exit: You can't screw up and get stuck.  It will always go to the next block
+                            <br/>
+                            Resolve immediate: Return state immediately and still go to the callbacks
+                        </aside>
+                    </section>
+                    <section class="bg-slight-blur" data-background-image="images/caution-1.jpg" data-background-size="contain" data-background="white center" data-background-repeat="no-repeat">
+                    </section>
+
+                    <section data-background="center" data-background-image="images/Wanna-know-how-I-got-these-scars-the-joker-9213269-622-455.jpg" data-background-repeat="no-repeat" data-background-size="contain">
+                        <h2 class="shaded">May scar</h2>
+                        <div class="fragment shaded">
+                            <p>Differing implementations</p>
+                            <p class="fragment">Can discourage testing "units"</p>
+                            <p class="fragment">De-register when view disappears</p>
+                            <p class="fragment">Catch all errors together</p>
+                            <p class="fragment">Promises hell</p>
+                            <p class="fragment">Hard to grasp initially</p>
+                        </div>
+                        <aside class="notes">
+                            Libs implement different versions of what it means to have "Promises". Luckily, most things are converting to follow the Promises/A standard.
+                            <br/>
+                            Tests:In practice, it feels a little common to put your code in a promise block and deal with it right there.  This isn't a science, just an observed behavior.
+                            <br/>
+                            de-register: In some of the libraries, it can be hard to cancel the promises if your view goes out of scope.
+                            <br/>
+                            errors: you want to follow normal try/catch rules.  Catch errors where they make sense and deal with them, or bubble up your own typed error your can differentiate.
+                            <br/>
+                            promise hell: just because you're using promises doesn't mean you can't still use a pattern of nesting promises in promises.  remember to keep things shallow
+                            <br/>
+                            Grasp:For some reason, the behavior of promises can be a little confusing to write for yourself initially
+                        </aside>
+                    </section>
+
+                    <section data-background-image="images/toomuch.jpg" data-background-size="contain" data-background="white center" data-background-repeat="no-repeat">
+                        <h2 class="shaded">Might be suffocating others</h2>
+                        <br/><br/>
+                        <br/><br/>
+                        <div class="shaded fragment">
+                            <p class="">Convert everything to promises</p>
+                            <p class="fragment">Or, insist on promises for your one module (not used anywhere else)</p>
+
+                        </div>
+                        <aside class="notes">
+                            Some callbacks are fine as is.  Don't make everything a promise by default unless you decide that's going to be your pattern everywhere for consistency
+                        </aside>
+                    </section>
 				</section>
 				<section>
                     <section>
                         <h2>Message Bus</h2>
-                        Central service for sending and receiving messages
+                        <p>Central service for sending and receiving messages</p>
                     </section>
                     <section>
                     	<h2>Android - Otto</h2>
@@ -1657,72 +1691,10 @@ postal.publish({
                             envelope has sent timestamp, channel, etc
                         </aside>
                     </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Completely De-Coupled</p>
-                        <aside class="notes">
-                            Neither receivers or publishers know about each other
 
-                            Can be a nice design, and the alure of completely decoupled views/models/controllers excites a certain type of dev
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Views/models/services work independently</p>
-                        <aside class="notes">
-                            Makes it so services can come and go, and anyone can subscribe to events and register themselves
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
-                        <h5>Positives</h5>
-                        <p>Components can self-register</p>
-                        <aside class="notes">
-                            You can have an app boot-up that skips the 1 by 1 registration of your app services; they just self register
-                        </aside>
-                    </section>
-
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Hard to trace publish origins</p>
-                        <aside class="notes">
-                            Searching through the codebase for where events come from can be challenging.  Same with refactoring.
-                            <br/><br/>
-                            Not self-documenting
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Needs developer limits</p>
-                        <aside class="notes">
-                            Avoid "pub" to "sub"..<br/>
-                            Events shouldn't really publish other events<br/>
-                            This starts too much of a cascading SOA without a central mechanism to see the flows<br/>
-                            You don't want to initiate async events on a hub just to load data.  Only do this for things that you don't care if they're not going to return until later
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Stateless</p>
-                        <aside class="notes">
-                            Can get confused for something that "should" have state, and if it's your only way to get the state, you're going to start "asking" things of the bus
-                        </aside>
-                    </section>
-                    <section data-background="center" data-background-image="images/negative-reviews.jpg" class="bg-blur" data-background-repeat="no-repeat" data-background-size="cover">
-                        <h5>Negatives</h5>
-                        <p>Should be a "part" of your architecture, not the only pattern</p>
-                        <aside class="notes">
-                            Combine this with the observer.  Once you want updates for a certain object, you should be listening to that object.<br/>
-                        	Not meant for fine-grained state<br/>
-                        	If you pub to sub, might get events initiated by something else
-                            <br/><br/>
-                            If your event can be broadcast for multiple objects, gets noisy (think blog:updated.  must filter each one by the blog id)
-                            <br/><br/>
-                            Think about posting to the bus about "creating" a new blog.  If you care about the result, you need to subscribe to the "BlogCreated" event, and then figure out if it's yours, or something else.
-                        </aside>
-                    </section>
-                    <section>
-                        <h5>When to use</h5>
-                        <p class="fragment">System-wide events</p>
+                    <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
+                        <h3>When to use</h3>
+                        <p>System-wide events</p>
                         <p class="fragment">Inter-module communication</p>
                         <p class="fragment">Want to handle EVERY event</p>
                         <p class="fragment">Library   allows easy filtering</p>
@@ -1731,6 +1703,71 @@ postal.publish({
                             Inter-Module Communication: communicate across views so they're not coupled, across libraries<br/>
                             Every event: don't want to constantly filter on everything ideally.  If you have a "subject", better to emit events about that subject (Observer)<br/>
                             Easily filtered: don't want a tough lib to handle getting out the bad messages<br/>
+                        </aside>
+                    </section>
+
+                    <section data-background="center" data-background-image="images/positive-attitude.jpg" class="bg-blur" data-background-size="cover">
+                        <h3>What's not to like?</h3>
+                        <p>Completely De-Coupled</p>
+                        <p>Views/models/services work independently</p>
+                        <p>Components can self-register</p>
+                        <aside class="notes">
+                            Neither receivers or publishers know about each other
+
+                            Can be a nice design, and the allure of completely decoupled views/models/controllers excites a certain type of dev
+                            <br/>
+                            Makes it so services can come and go, and anyone can subscribe to events and register themselves
+                            <br/>
+                            You can have an app boot-up that skips the 1 by 1 registration of your app services; they just self register
+                        </aside>
+                    </section>
+                    <section data-background="white center" data-background-image="images/183ee6v1dn6bhpng.png"
+                             data-background-repeat="no-repeat" data-background-size="contain">
+                    </section>
+
+                    <section data-background="white center" data-background-image="images/cat-biting-during-petting.jpg"
+                             data-background-repeat="no-repeat" data-background-size="contain">
+                        <h3 class="shaded">Known to bite</h3>
+                        <div class="shaded fragment">
+                            <p>- Tracing event origins/flows</p>
+                            <p class="fragment">- Asking for state you need synchronously</p>
+                            <p class="fragment">- Event topics too broad</p>
+                        </div>
+                        <aside class="notes">
+                            Searching through the codebase for where events come from can be challenging.  Same with refactoring.
+                            <br/><br/>
+                            Not self-documenting
+                            <br/>
+                            State: Can get confused for something that "should" have state, and if it's your only way to get the state, you're going to start "asking" things of the bus
+                            <br/>
+                            Events too broad:
+                            If your event can be broadcast for multiple objects, gets noisy (think blog:updated.  must filter each one by the blog id)
+                            <br/>
+                            Think about posting to the bus about "creating" a new blog.  If you care about the result, you need to subscribe to the "BlogCreated" event, and then figure out if it's yours, or something else.
+                        </aside>
+                    </section>
+
+                    <section data-background-image="images/4599681684_d5336aa0e4_z.jpg" data-background-size="contain" data-background="white center" data-background-repeat="no-repeat">
+                        <h2 class="shaded">Over-done?</h2>
+                        <br/><br/>
+                        <br/><br/>
+                        <div class="shaded fragment">
+                            <p class="">- Pub to sub</p>
+                            <p class="fragment">- Making it your ONLY pattern</p>
+                            <p class="fragment">- Events publish events</p>
+                        </div>
+                        <aside class="notes">
+                            Pub to sub pattern:
+                            You don't want to initiate async events on a hub just to load data.  Only do this for things that you don't care if they're not going to return until later
+                           <br/>
+                            If you pub to sub, might get events initiated by something else
+                            <br/>
+                            Combine this with the observer.  Once you want updates for a certain object, you should be listening to that object.<br/>
+                            Not meant for fine-grained state<br/>
+                            <br/>
+                            Events publish events:
+                            This starts too much of a cascading SOA without a central mechanism to see the flows<br/>
+
                         </aside>
                     </section>
 				</section>
@@ -1758,7 +1795,7 @@ yield, await, async
                 </section>
 
                 <section data-background-image="images/superstreetfighter2.jpg" class="bg-fade">
-                    <h2 class="border-light">Reactive Programming</h2>
+                    <h2 class="shaded">Reactive Programming</h2>
                     <aside class="notes">
                         Combos of all of the above
                         <br/><br/>
@@ -1768,11 +1805,12 @@ yield, await, async
                     </aside>
                 </section>
 
-                <section data-background="white">
-                    <section class=" bg-fade" data-background-image="images/Copyoferase.jpg">
-                        <h2 class="shadow ">Ok, how do I use this?</h2>
+                <section>
+                    <section class="bg-slight-fade" data-background-image="images/Copyoferase.jpg">
+                        <h2 class="shaded-8 ">Ok, how do I use this?</h2>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                     </section>
-                    <section>
+                    <section >
                         <h2>Services</h2>
                         <p>Promises/Callback Coordinators</p>
                         <p>Message Bus</p>
@@ -1800,11 +1838,14 @@ yield, await, async
                         <h2>Views/Controllers</h2>
                         <p>Observable</p>
                         <p>Observer</p>
+                        <p>Delegates</p>
                         <p>Message Bus</p>
                         <aside class="notes">
                             Observe model state
                             <br/>
                             Publish view events to subscribers
+                            <br/>
+                            Delegates for handing off control to helpers/presenters
                             <br/>
                             Publish user events across views with message bus
                             <br/>
@@ -1847,7 +1888,7 @@ yield, await, async
                         <h2>Focus on <span style="-webkit-filter: blur(4px);">Readability</span></h2>
 					</section>
                     <section>
-                        <h2>De-register when Views Disappear</h2>
+                        <h2>De-register when Views <span class="fade-on-display">Disappear</span></h2>
                         <aside class="notes">
                             If you reference views/elements that might be gone when your callback runs, you may end up killing your app.  This is true of almost every async pattern and is something you need to think about.
                             <br/>
@@ -1857,7 +1898,7 @@ yield, await, async
 					<section data-background-image="images/clean_code.png" data-background-size="contain"
                             class="bg-blur">
 						<h2>Write testable functions</h2>
-                        <p class="fragment">Then add coordination</p>
+                        <p class="fragment">then add coordination</p>
 						<aside class="notes">
 							This helps to think in terms of little units, as well as testing
 						</aside>
