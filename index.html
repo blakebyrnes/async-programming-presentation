@@ -72,8 +72,8 @@
                 display: none !important;
             }
 
-            .present .fade-on-display {
-                -webkit-animation: fade-out 4s forwards  ease-in-out;
+            .present > * > .fade-on-display {
+                -webkit-animation: fade-out 3s forwards ease-in-out;
             }
             h2.shadow,h3.shadow {
                 text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
@@ -202,8 +202,8 @@ $("#button").click(function(e){
                             Client side - handle events
                         </aside>
                     </section>
-                    
-                    <section data-background-image="images/EasyButton.jpg">
+
+                    <section data-background-image="images/EasyButton.jpg" data-background-size="contain" data-background-repeat="no-repeat" data-background="white center">
                         <aside class="notes">
                             Some of you are saying, I went to the wrong class. Shit
                         </aside>
@@ -276,17 +276,25 @@ plugs.populateData();
 					</section>
 				</section>
 				<section>
-					<section data-background-image="images/running-man-05-g.jpg" class="bg-blur">
-                        <h2>What is async?</h2>
-                        <h4>Code that doesn't wait!</h4>
-						<p style="font-size: 1.5em">Will execute later</p>
+					<section data-background-image="images/running-man-05-g.jpg" class="bg-slight-blur">
+                        <h2 class="shaded-8">What is async?</h2>
+                        <div class="shaded-8">
+                            <h4>Code that doesn't wait!</h4>
+                            <p style="font-size: 1.5em">Will execute later</p>
+                        </div>
                         <!-- running man picture -->
 						<aside class="notes">
-							Ever thought as you were leaving, "Remember to lock the door", then you did a bunch of other stuff, and then you finally got to the door, and remembered to lock it.  Kinda like that.
-                            <br/><br/>
 							Important to talk about how it doesn't block.  Implication is that it can get more out of the CPU where the code is running
 						</aside>
 					</section>
+                    <section data-background="white">
+                        <h2 style="color:#292f33">Your brain is an asynchronous machine</h2>
+                        <p style="color:#2b7bb9">#devnexus #asyncprogramming #omgenius</p>
+                        <aside class="notes">
+                             Ever thought as you were leaving, "Remember to lock the door", then you did a bunch of other stuff,
+                            and then you finally got to the door, and remembered to lock it.  Kinda like that.
+                        </aside>
+                    </section>
 					<section>
                         <h2>1, 2, 3</h2>
 					    <pre class="smaller"><code data-trim>
@@ -357,47 +365,10 @@ clickHandler();
                             JS is really good at queuing things up to run when events signal that they're ready
                         </aside>
                     </section>
-                    <section class=" bg-fade" data-background="images/branches.png">
-                        <h3 class="shaded-8" >async === Multi-Threading?</h3>
-
-                        <aside class="notes">
-                            - Async CAN be multithreaded, but doesn't need to be.
-                            <br/>
-                            - Probably will be in mobile, but depends on if it needs CPU
-
-                            <a href="http://stackoverflow.com/questions/600795/asynchronous-vs-multithreading-is-there-a-difference">stack overflow</a>
-                        </aside>
-                    </section>
                     <section data-background="white center" data-background-image="images/mobiledevices.jpg" data-background-size="contain" data-background-repeat="no-repeat">
                         <aside class="notes">
                             Run loop draws (16ms to complete it's loop and still feel fast)<br/>
                             Gotta run things in bg so they don't block
-                        </aside>
-                    </section>
-                    <section>
-                        <h2>ERGO</h2>
-                        <p>User Interface</p>
-                        <!-- show someone about to hit a ui button -->
-						<pre style="font-size:35px"><code class="javascript">
-  $("#button").click(function(e){
-    console.log("handle async");
-  });
-                        </code></pre>
-                        <aside class="notes">
-                            Client side - handle events
-                        </aside>
-                    </section>
-                    <section>
-                        <h2>Q.E.D.</h2>
-                        <p>Network</p>
-                        <!-- show someone about to hit a ui button -->
-						<pre style="font-size:35px"><code class="javascript">
-  $.get('/user/1', function(user){
-    //deal with result
-  });
-                        </code></pre>
-                        <aside class="notes">
-                            Ajax - long running events
                         </aside>
                     </section>
 				</section>
@@ -458,10 +429,10 @@ clickHandler();
 				<section>
 					<h3>Example - can't change backend</h3>
 					<ol>
-						<li class="fragment">Load blog</li>
-						<li class="fragment">Load author</li>
-						<li class="fragment">Load comments</li>
-						<li class="fragment">Load each commentor user profile</li>
+						<li>Load blog</li>
+						<li>Load author</li>
+						<li>Load comments</li>
+						<li>Load each commentor user profile</li>
 					</ol>
 				</section>
 				<section>
@@ -832,7 +803,7 @@ _makePostAppend: function( params, body, options, next ){
                 </section>
 				<section data-background-image="images/fractal_10.jpg" class="dark bg-fade">
 					<h1>Patterns</h1>
-					<p class="fragment" style="font-size:1.6em">aka, Great, what do I do with this knowledge?</p>
+					<p style="font-size:1.6em">aka, Great, what do I do with this knowledge?</p>
 				</section>
 
 				<section data-background="white">
@@ -1359,6 +1330,7 @@ public GameFragment extends Fragment {
                     <section data-background="white center" data-background-image="images/wonka.jpg" class="bg-fade" data-background-repeat="no-repeat" data-background-size="contain">
                         <p class="shaded" data-fragment-index="0">Object <span style="font-size: 0.7em">that will</span></p>
                         <p class="shaded fragment" data-fragment-index="1"><i style="font-size: 1.3em">always</i> either <b style="color: green">resolve</b> or <b style="color: red">reject</b></p>
+                        <p class="shaded fragment">once</p>
                     </section>
                     <section data-background-image="images/6929697914_0fd3bd4457_b.jpg" data-background-size="contain">
                         <aside class="notes">
@@ -1561,7 +1533,7 @@ return blogDAO.loadFromDB(blogId)
      //resolve later
      return blogRestService.loadBlog(blogId);
  })
- .done(blog ->
+ .done(blog -> {
    //display blog
  })
  .fail(exception -> {
@@ -1869,8 +1841,8 @@ yield, await, async
                         <h1 class="border-light">Tips to "Retrieve"</h1>
                         <p>when you get stuck</p>
 					</section>
-					<section>
-						<h2>2 deep!</h2>
+					<section data-background-image="http://i.livescience.com/images/i/000/072/284/original/anglerfish-teeth.jpeg?1416865204">
+						<h2 class="shaded-8">2 deep!</h2>
                         <aside class="notes">
                             Refactor as you write and notice code nesting
                         </aside>
