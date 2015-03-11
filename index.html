@@ -1542,6 +1542,27 @@ return blogDAO.loadFromDB(blogId)
 
                         </code></pre>
                     </section>
+                    <section>
+                        <h2>Java 8</h2>
+                        <pre class="stretch smaller"><code class="java">
+
+ CompletableFuture
+   .supplyAsync(() -> {
+      //download, talk to friends, check facebook
+      return new BigBadResult(loadedData);
+   })
+   .handle((result, ex) -> {
+      if (result != null) {
+        return result;
+      }
+
+      //else
+      ex.printStackTrace();
+      return null;
+   });
+
+                        </code></pre>
+                    </section>
                     <section data-background-image="images/tool-box1-624x361.jpg" class="bg-blur">
                         <h3>When to Use</h3>
                         <p class="fragment">Coordinated Async Calls (parallel/sequence)</p>
